@@ -1,0 +1,22 @@
+# Sennheiser desktop client (binary/external)
+sennheiser-desktop-client/
+
+# macOS
+.DS_Store
+*.swp
+*~
+
+# Xcode
+build/
+DerivedData/
+*.xcuserstate
+*.xcuserdatad/
+xcuserdata/
+*.xcworkspace/xcuserdata/
+
+# Swift Package Manager
+.build/
+Packages/
+
+# Claude Code
+.claude/

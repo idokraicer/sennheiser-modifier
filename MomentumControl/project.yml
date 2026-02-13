@@ -1,0 +1,50 @@
+name: MomentumControl
+options:
+  bundleIdPrefix: com.momentumcontrol
+  deploymentTarget:
+    macOS: "14.0"
+  xcodeVersion: "16.0"
+  generateEmptyDirectories: true
+
+settings:
+  base:
+    SWIFT_VERSION: "5.10"
+    MACOSX_DEPLOYMENT_TARGET: "14.0"
+    ENABLE_USER_SCRIPT_SANDBOXING: false
+
+targets:
+  MomentumControl:
+    type: application
+    platform: macOS
+    sources:
+      - path: MomentumControl
+        type: group
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.momentumcontrol.app
+        INFOPLIST_FILE: Info.plist
+        CODE_SIGN_ENTITLEMENTS: MomentumControl.entitlements
+        PRODUCT_NAME: MomentumControl
+        GENERATE_INFOPLIST_FILE: false
+        LD_RUNPATH_SEARCH_PATHS:
+          - "@executable_path/../Frameworks"
+        SWIFT_EMIT_LOC_STRINGS: "YES"
+    dependencies:
+      - framework: IOBluetooth.framework
+        embed: false
+      - sdk: CoreBluetooth.framework
+
+  MomentumControlTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: MomentumControlTests
+        type: group
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.momentumcontrol.tests
+        GENERATE_INFOPLIST_FILE: true
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/MomentumControl.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MomentumControl"
+        BUNDLE_LOADER: "$(TEST_HOST)"
+    dependencies:
+      - target: MomentumControl

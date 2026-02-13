@@ -1,0 +1,580 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		03A19BA81EEC110A55B7EE05 /* ANCControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1840CDBA124F795C0447D47 /* ANCControlView.swift */; };
+		097EA882E9C387AB4818A0E4 /* BluetoothTransport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42819BE38757F939038FD991 /* BluetoothTransport.swift */; };
+		147CF10E61F8A0C3127F7595 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5ABFC7611BFE867B449E2AF /* Constants.swift */; };
+		333BEC2FA33A40EA35296F9B /* DataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EB0E08DEFA1E4A17E57E0E9 /* DataExtensions.swift */; };
+		38B8C4266EB41815550FAE3D /* HeadphoneViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E69E2024F08AB97114956D /* HeadphoneViewModel.swift */; };
+		3A995E5A5AAB55B058474CEA /* GAIAPacket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7319DB61992DBDF17E027A3A /* GAIAPacket.swift */; };
+		3B77BF0A12C771614677A9BB /* GAIAPropertyRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E4490CCC991CBE842A6322F /* GAIAPropertyRegistry.swift */; };
+		3F27C58317D4A7FE070FE83A /* QuickTogglesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC9AE08B3AE9BB61BE6B7A3 /* QuickTogglesView.swift */; };
+		487D3425663BC949F8758AF3 /* IOBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9852C13107A28D523C365F25 /* IOBluetooth.framework */; };
+		5557691C8B407464E0243B3E /* GAIAPropertyRegistryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 496DBEEEC2D0CD227F2BAEC1 /* GAIAPropertyRegistryTests.swift */; };
+		5BE7D02768C67B8947B3CD18 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5D1F8D3E2EB9BBE4627AB2B /* CoreBluetooth.framework */; };
+		62595C34ED18EC8E6606B90E /* GAIAConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CDF3CB43B762408BC69970 /* GAIAConnection.swift */; };
+		6513241200A569BE531689EA /* MomentumControlApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4660E61D98EBB3527A627F96 /* MomentumControlApp.swift */; };
+		72B9B8000D2EA8D9A4D934DF /* DeviceScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6DA632538BE7A9343E7381 /* DeviceScannerView.swift */; };
+		7324BE037747EB2F9EB8234C /* GAIAPacketTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF13F1748445587D3A9C1A72 /* GAIAPacketTests.swift */; };
+		77ABBED4703574E49355EAF3 /* ConnectionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2194ED5FD88E3FC5C5C5CB57 /* ConnectionStatus.swift */; };
+		807D8BE3D05B6CB222D336C1 /* DeviceHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D25A8AC7DA01B3DA982359C1 /* DeviceHeaderView.swift */; };
+		83F0C3C881746441790C9E17 /* PairedDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7753E2AF0ECE197F817C9D3 /* PairedDevice.swift */; };
+		A814299DA0442838C98BC692 /* DeviceState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0080AD481E438456E786271 /* DeviceState.swift */; };
+		B9A80A7D74262AF76F1C3F23 /* GAIAPropertyDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC2B239433DD5ED9BBAC7DC8 /* GAIAPropertyDefinition.swift */; };
+		C7D7E73B7840126265B1AEE1 /* ANCMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49379A50FA5F7BE0CCB21703 /* ANCMode.swift */; };
+		CA47695E0995D3FCDAEA274B /* ConnectedDevicesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5D6B34D0DC7EF5BC43140D5 /* ConnectedDevicesView.swift */; };
+		CC0C3B6860522BD814469C98 /* RFCOMMChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C714979E04D5D85CE2BCD2F8 /* RFCOMMChannel.swift */; };
+		CD145C4E51E78104B74ADD18 /* BLEScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36EF27706FAEE2AB22A21A29 /* BLEScanner.swift */; };
+		E510CEA52298A4C4E43C5BC8 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8CFC539E0F77E3C6FF6D07 /* SettingsView.swift */; };
+		E69C429910FED079E25C11C4 /* MenuBarIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142C16BD5B46B851E85C0A98 /* MenuBarIcon.swift */; };
+		E83E1DAE865FB07AE075BC84 /* GAIAValueParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA24C67363E7D8E1205D1C36 /* GAIAValueParser.swift */; };
+		EA36685937D9480CADD29D5E /* MACResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49ACE9C63BFA3C9B091795AD /* MACResolver.swift */; };
+		EBC8247B97325915BF8BADDE /* PopoverContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF344A70ABC51480475DEEE4 /* PopoverContentView.swift */; };
+		F8259E837C8C94F49696F7B5 /* GAIAValueParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4217EA5F2F18F34B72BF17DB /* GAIAValueParserTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		AA04F25C35555F3EEE9800B8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 797EE9364DFFFB57A0C79ECB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F256CA6EC83706B93D0AD2E0;
+			remoteInfo = MomentumControl;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0EB0E08DEFA1E4A17E57E0E9 /* DataExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensions.swift; sourceTree = "<group>"; };
+		142C16BD5B46B851E85C0A98 /* MenuBarIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarIcon.swift; sourceTree = "<group>"; };
+		2194ED5FD88E3FC5C5C5CB57 /* ConnectionStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionStatus.swift; sourceTree = "<group>"; };
+		36EF27706FAEE2AB22A21A29 /* BLEScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEScanner.swift; sourceTree = "<group>"; };
+		4217EA5F2F18F34B72BF17DB /* GAIAValueParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GAIAValueParserTests.swift; sourceTree = "<group>"; };
+		42819BE38757F939038FD991 /* BluetoothTransport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothTransport.swift; sourceTree = "<group>"; };
+		4660E61D98EBB3527A627F96 /* MomentumControlApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MomentumControlApp.swift; sourceTree = "<group>"; };
+		49379A50FA5F7BE0CCB21703 /* ANCMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ANCMode.swift; sourceTree = "<group>"; };
+		496DBEEEC2D0CD227F2BAEC1 /* GAIAPropertyRegistryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GAIAPropertyRegistryTests.swift; sourceTree = "<group>"; };
+		49ACE9C63BFA3C9B091795AD /* MACResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MACResolver.swift; sourceTree = "<group>"; };
+		4A0CB454CF05C9E59B23194C /* MomentumControl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MomentumControl.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5F6DA632538BE7A9343E7381 /* DeviceScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceScannerView.swift; sourceTree = "<group>"; };
+		7319DB61992DBDF17E027A3A /* GAIAPacket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GAIAPacket.swift; sourceTree = "<group>"; };
+		7E4490CCC991CBE842A6322F /* GAIAPropertyRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GAIAPropertyRegistry.swift; sourceTree = "<group>"; };
+		858948E832CDC8C704F5F318 /* MomentumControlTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MomentumControlTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9852C13107A28D523C365F25 /* IOBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = IOBluetooth.framework; sourceTree = "<group>"; };
+		9F8CFC539E0F77E3C6FF6D07 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		9FC9AE08B3AE9BB61BE6B7A3 /* QuickTogglesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickTogglesView.swift; sourceTree = "<group>"; };
+		A5ABFC7611BFE867B449E2AF /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		AC2B239433DD5ED9BBAC7DC8 /* GAIAPropertyDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GAIAPropertyDefinition.swift; sourceTree = "<group>"; };
+		AF13F1748445587D3A9C1A72 /* GAIAPacketTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GAIAPacketTests.swift; sourceTree = "<group>"; };
+		C0080AD481E438456E786271 /* DeviceState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceState.swift; sourceTree = "<group>"; };
+		C2CDF3CB43B762408BC69970 /* GAIAConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GAIAConnection.swift; sourceTree = "<group>"; };
+		C5D6B34D0DC7EF5BC43140D5 /* ConnectedDevicesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectedDevicesView.swift; sourceTree = "<group>"; };
+		C714979E04D5D85CE2BCD2F8 /* RFCOMMChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RFCOMMChannel.swift; sourceTree = "<group>"; };
+		CA24C67363E7D8E1205D1C36 /* GAIAValueParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GAIAValueParser.swift; sourceTree = "<group>"; };
+		D25A8AC7DA01B3DA982359C1 /* DeviceHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceHeaderView.swift; sourceTree = "<group>"; };
+		D7753E2AF0ECE197F817C9D3 /* PairedDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairedDevice.swift; sourceTree = "<group>"; };
+		E5D1F8D3E2EB9BBE4627AB2B /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
+		EF344A70ABC51480475DEEE4 /* PopoverContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverContentView.swift; sourceTree = "<group>"; };
+		F1840CDBA124F795C0447D47 /* ANCControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ANCControlView.swift; sourceTree = "<group>"; };
+		F8E69E2024F08AB97114956D /* HeadphoneViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadphoneViewModel.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2F5C909A2273AC764EF3DB71 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				487D3425663BC949F8758AF3 /* IOBluetooth.framework in Frameworks */,
+				5BE7D02768C67B8947B3CD18 /* CoreBluetooth.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0BE53912881F0D52079D7F85 /* Bluetooth */ = {
+			isa = PBXGroup;
+			children = (
+				36EF27706FAEE2AB22A21A29 /* BLEScanner.swift */,
+				42819BE38757F939038FD991 /* BluetoothTransport.swift */,
+				49ACE9C63BFA3C9B091795AD /* MACResolver.swift */,
+				C714979E04D5D85CE2BCD2F8 /* RFCOMMChannel.swift */,
+			);
+			path = Bluetooth;
+			sourceTree = "<group>";
+		};
+		1E7AE152C6AA8EDB768AA4F0 = {
+			isa = PBXGroup;
+			children = (
+				DB9BFEA819E90F679125AB1C /* MomentumControl */,
+				A9AD50836AAD98AC4892D243 /* MomentumControlTests */,
+				B09FFA94EF1E400337CD28AF /* Frameworks */,
+				28F754F3C3CE633583A867BE /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		28F754F3C3CE633583A867BE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4A0CB454CF05C9E59B23194C /* MomentumControl.app */,
+				858948E832CDC8C704F5F318 /* MomentumControlTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7B295F1803C7401AF6C6CE9B /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				F1840CDBA124F795C0447D47 /* ANCControlView.swift */,
+				C5D6B34D0DC7EF5BC43140D5 /* ConnectedDevicesView.swift */,
+				D25A8AC7DA01B3DA982359C1 /* DeviceHeaderView.swift */,
+				5F6DA632538BE7A9343E7381 /* DeviceScannerView.swift */,
+				142C16BD5B46B851E85C0A98 /* MenuBarIcon.swift */,
+				EF344A70ABC51480475DEEE4 /* PopoverContentView.swift */,
+				9FC9AE08B3AE9BB61BE6B7A3 /* QuickTogglesView.swift */,
+				9F8CFC539E0F77E3C6FF6D07 /* SettingsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		9E9D6B935024DF8494269A2B /* App */ = {
+			isa = PBXGroup;
+			children = (
+				4660E61D98EBB3527A627F96 /* MomentumControlApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		A1C51C5A78188A0C82272B82 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				A5ABFC7611BFE867B449E2AF /* Constants.swift */,
+				0EB0E08DEFA1E4A17E57E0E9 /* DataExtensions.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		A9AD50836AAD98AC4892D243 /* MomentumControlTests */ = {
+			isa = PBXGroup;
+			children = (
+				AF13F1748445587D3A9C1A72 /* GAIAPacketTests.swift */,
+				496DBEEEC2D0CD227F2BAEC1 /* GAIAPropertyRegistryTests.swift */,
+				4217EA5F2F18F34B72BF17DB /* GAIAValueParserTests.swift */,
+			);
+			path = MomentumControlTests;
+			sourceTree = "<group>";
+		};
+		B09FFA94EF1E400337CD28AF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E5D1F8D3E2EB9BBE4627AB2B /* CoreBluetooth.framework */,
+				9852C13107A28D523C365F25 /* IOBluetooth.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B76D3F92DA00D32238C865A3 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				F8E69E2024F08AB97114956D /* HeadphoneViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		CE26E230F8B47C99AC565914 /* GAIA */ = {
+			isa = PBXGroup;
+			children = (
+				C2CDF3CB43B762408BC69970 /* GAIAConnection.swift */,
+				7319DB61992DBDF17E027A3A /* GAIAPacket.swift */,
+				AC2B239433DD5ED9BBAC7DC8 /* GAIAPropertyDefinition.swift */,
+				7E4490CCC991CBE842A6322F /* GAIAPropertyRegistry.swift */,
+				CA24C67363E7D8E1205D1C36 /* GAIAValueParser.swift */,
+			);
+			path = GAIA;
+			sourceTree = "<group>";
+		};
+		D7FBE0C16C52EC00452FFD9B /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				49379A50FA5F7BE0CCB21703 /* ANCMode.swift */,
+				2194ED5FD88E3FC5C5C5CB57 /* ConnectionStatus.swift */,
+				C0080AD481E438456E786271 /* DeviceState.swift */,
+				D7753E2AF0ECE197F817C9D3 /* PairedDevice.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		DB9BFEA819E90F679125AB1C /* MomentumControl */ = {
+			isa = PBXGroup;
+			children = (
+				9E9D6B935024DF8494269A2B /* App */,
+				0BE53912881F0D52079D7F85 /* Bluetooth */,
+				CE26E230F8B47C99AC565914 /* GAIA */,
+				D7FBE0C16C52EC00452FFD9B /* Model */,
+				A1C51C5A78188A0C82272B82 /* Utilities */,
+				B76D3F92DA00D32238C865A3 /* ViewModel */,
+				7B295F1803C7401AF6C6CE9B /* Views */,
+			);
+			path = MomentumControl;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C6139E0316645DBC31D12F4C /* MomentumControlTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6E651082C1E048C3CA626548 /* Build configuration list for PBXNativeTarget "MomentumControlTests" */;
+			buildPhases = (
+				34678168030CC174569F61E3 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6A25185CF723B10F55D5E1A3 /* PBXTargetDependency */,
+			);
+			name = MomentumControlTests;
+			packageProductDependencies = (
+			);
+			productName = MomentumControlTests;
+			productReference = 858948E832CDC8C704F5F318 /* MomentumControlTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		F256CA6EC83706B93D0AD2E0 /* MomentumControl */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 27EE31B5FE6078319629EFE9 /* Build configuration list for PBXNativeTarget "MomentumControl" */;
+			buildPhases = (
+				9D6DE6A8D47DB8B17E178784 /* Sources */,
+				2F5C909A2273AC764EF3DB71 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MomentumControl;
+			packageProductDependencies = (
+			);
+			productName = MomentumControl;
+			productReference = 4A0CB454CF05C9E59B23194C /* MomentumControl.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		797EE9364DFFFB57A0C79ECB /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+			};
+			buildConfigurationList = 9DDA8DC0AB2B39D4FB8F3AC5 /* Build configuration list for PBXProject "MomentumControl" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 1E7AE152C6AA8EDB768AA4F0;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F256CA6EC83706B93D0AD2E0 /* MomentumControl */,
+				C6139E0316645DBC31D12F4C /* MomentumControlTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		34678168030CC174569F61E3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7324BE037747EB2F9EB8234C /* GAIAPacketTests.swift in Sources */,
+				5557691C8B407464E0243B3E /* GAIAPropertyRegistryTests.swift in Sources */,
+				F8259E837C8C94F49696F7B5 /* GAIAValueParserTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9D6DE6A8D47DB8B17E178784 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				03A19BA81EEC110A55B7EE05 /* ANCControlView.swift in Sources */,
+				C7D7E73B7840126265B1AEE1 /* ANCMode.swift in Sources */,
+				CD145C4E51E78104B74ADD18 /* BLEScanner.swift in Sources */,
+				097EA882E9C387AB4818A0E4 /* BluetoothTransport.swift in Sources */,
+				CA47695E0995D3FCDAEA274B /* ConnectedDevicesView.swift in Sources */,
+				77ABBED4703574E49355EAF3 /* ConnectionStatus.swift in Sources */,
+				147CF10E61F8A0C3127F7595 /* Constants.swift in Sources */,
+				333BEC2FA33A40EA35296F9B /* DataExtensions.swift in Sources */,
+				807D8BE3D05B6CB222D336C1 /* DeviceHeaderView.swift in Sources */,
+				72B9B8000D2EA8D9A4D934DF /* DeviceScannerView.swift in Sources */,
+				A814299DA0442838C98BC692 /* DeviceState.swift in Sources */,
+				62595C34ED18EC8E6606B90E /* GAIAConnection.swift in Sources */,
+				3A995E5A5AAB55B058474CEA /* GAIAPacket.swift in Sources */,
+				B9A80A7D74262AF76F1C3F23 /* GAIAPropertyDefinition.swift in Sources */,
+				3B77BF0A12C771614677A9BB /* GAIAPropertyRegistry.swift in Sources */,
+				E83E1DAE865FB07AE075BC84 /* GAIAValueParser.swift in Sources */,
+				38B8C4266EB41815550FAE3D /* HeadphoneViewModel.swift in Sources */,
+				EA36685937D9480CADD29D5E /* MACResolver.swift in Sources */,
+				E69C429910FED079E25C11C4 /* MenuBarIcon.swift in Sources */,
+				6513241200A569BE531689EA /* MomentumControlApp.swift in Sources */,
+				83F0C3C881746441790C9E17 /* PairedDevice.swift in Sources */,
+				EBC8247B97325915BF8BADDE /* PopoverContentView.swift in Sources */,
+				3F27C58317D4A7FE070FE83A /* QuickTogglesView.swift in Sources */,
+				CC0C3B6860522BD814469C98 /* RFCOMMChannel.swift in Sources */,
+				E510CEA52298A4C4E43C5BC8 /* SettingsView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		6A25185CF723B10F55D5E1A3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F256CA6EC83706B93D0AD2E0 /* MomentumControl */;
+			targetProxy = AA04F25C35555F3EEE9800B8 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		60FEF846ABE840788493BC11 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = MomentumControl.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\".\"",
+				);
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.momentumcontrol.app;
+				PRODUCT_NAME = MomentumControl;
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Debug;
+		};
+		939C9923456E96B669673DA4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.10;
+			};
+			name = Debug;
+		};
+		9B2DE392F2062FD8E84BD5BA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.momentumcontrol.tests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MomentumControl.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MomentumControl";
+			};
+			name = Release;
+		};
+		B93D87C01A68A56A7B20172C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = MomentumControl.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\".\"",
+				);
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.momentumcontrol.app;
+				PRODUCT_NAME = MomentumControl;
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
+		F212EEA74CCD95690AA5372C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.momentumcontrol.tests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MomentumControl.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MomentumControl";
+			};
+			name = Debug;
+		};
+		FAAD75C49F13A56520078CF2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.10;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		27EE31B5FE6078319629EFE9 /* Build configuration list for PBXNativeTarget "MomentumControl" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				60FEF846ABE840788493BC11 /* Debug */,
+				B93D87C01A68A56A7B20172C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		6E651082C1E048C3CA626548 /* Build configuration list for PBXNativeTarget "MomentumControlTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F212EEA74CCD95690AA5372C /* Debug */,
+				9B2DE392F2062FD8E84BD5BA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		9DDA8DC0AB2B39D4FB8F3AC5 /* Build configuration list for PBXProject "MomentumControl" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				939C9923456E96B669673DA4 /* Debug */,
+				FAAD75C49F13A56520078CF2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 797EE9364DFFFB57A0C79ECB /* Project object */;
+}
