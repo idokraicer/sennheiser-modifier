@@ -20,3 +20,6 @@ Packages/
 
 # Claude Code
 .claude/
+
+# dora code context index
+.dora/

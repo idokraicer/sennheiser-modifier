@@ -3,6 +3,21 @@ import SwiftUI
 struct ANCControlView: View {
     @Bindable var viewModel: HeadphoneViewModel
 
+    private var transparencyLabel: String {
+        let level = viewModel.state.ancTransparencyLevel
+        if level <= 0 {
+            return "ANC 100%"
+        } else if level >= 100 {
+            return "Transparency 100%"
+        } else if level <= 50 {
+            let pct = 100 - level * 2
+            return "ANC \(pct)%"
+        } else {
+            let pct = (level - 50) * 2
+            return "Transparency \(pct)%"
+        }
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Noise Control")
@@ -26,9 +41,15 @@ struct ANCControlView: View {
             // This matches the C++ ANCCardHelper which shows these controls when ANC is enabled.
             if viewModel.state.effectiveANCMode == .anc {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Transparency Level")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                    HStack {
+                        Text("Transparency Level")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        Text(transparencyLabel)
+                            .font(.caption.monospacedDigit())
+                            .foregroundStyle(.secondary)
+                    }
 
                     HStack {
                         Image(systemName: "ear")
@@ -40,7 +61,7 @@ struct ANCControlView: View {
                                 get: { Double(viewModel.state.ancTransparencyLevel) },
                                 set: { viewModel.setTransparencyLevel(Int($0)) }
                             ),
-                            in: 0...255,
+                            in: 0...100,
                             step: 1
                         )
 

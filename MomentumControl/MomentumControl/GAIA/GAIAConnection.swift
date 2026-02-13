@@ -15,6 +15,9 @@ final class GAIAConnection {
     /// Callback when a property value is received
     var onPropertyReceived: ((GAIAPropertyDefinition, [GAIAValue]) -> Void)?
 
+    /// Callback when an unrecognized packet is received (vendor, command, payload)
+    var onUnknownPacket: ((UInt16, UInt16, Data) -> Void)?
+
     /// Whether the transport is currently connected
     var isConnected: Bool { transport.isConnected }
 
@@ -107,6 +110,7 @@ final class GAIAConnection {
                 onPropertyReceived?(property, values)
             } else {
                 logger.debug("Unknown response: vendor=\(String(format: "0x%04X", packet.vendorID)) cmd=\(String(format: "0x%04X", packet.commandID))")
+                onUnknownPacket?(packet.vendorID, packet.commandID, packet.payload)
             }
         }
     }

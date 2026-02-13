@@ -32,6 +32,17 @@ final class HeadphoneViewModel {
                 self?.handlePropertyUpdate(property: property, values: values)
             }
         }
+
+        connection.onUnknownPacket = { [weak self] vendorID, commandID, _ in
+            guard let self, vendorID == Constants.sennheiserVendorID else { return }
+            // Unknown Sennheiser notification — re-fetch ANC/Transparency state
+            // to stay in sync (e.g. 0x089A from newer firmware)
+            logger.info("Unknown Sennheiser cmd=\(String(format: "0x%04X", commandID)), re-fetching ANC state")
+            connection.sendGet(for: .ancStatus)
+            connection.sendGet(for: .transparentHearingStatus)
+            connection.sendGet(for: .ancTransparency)
+            connection.sendGet(for: .anc)
+        }
     }
 
     @MainActor
@@ -313,7 +324,7 @@ final class HeadphoneViewModel {
         transparencyDebounceTask = Task { @MainActor in
             try? await Task.sleep(for: .seconds(1))
             guard !Task.isCancelled else { return }
-            connection.sendSet(for: .ancTransparency, values: [.uint8(UInt8(clamping: level))])
+            connection.sendSet(for: .ancTransparency, values: [.uint8(UInt8(clamping: min(level, 100)))])
         }
     }
 
