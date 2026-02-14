@@ -80,7 +80,6 @@ final class HeadphoneViewModel {
                 let antiWind = values[1].asInt
                 state.antiWindEnabled = antiWind == 1 || antiWind == 2
                 state.antiWindValue = antiWind
-                state.comfortModeEnabled = values[3].asInt == 1
                 state.adaptiveModeEnabled = values[5].asInt == 1
             }
 
@@ -343,10 +342,6 @@ final class HeadphoneViewModel {
 
     func setAntiWindValue(_ value: Int) {
         connection.sendSet(for: .anc, values: [.uint8(0x01), .uint8(UInt8(clamping: value))])
-    }
-
-    func setComfortMode(enabled: Bool) {
-        connection.sendSet(for: .anc, values: [.uint8(0x02), .uint8(enabled ? 0x01 : 0x00)])
     }
 
     func setAdaptiveMode(enabled: Bool) {

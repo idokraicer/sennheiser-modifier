@@ -25,7 +25,6 @@ final class DeviceState {
     var ancTransparencyLevel: Int = 0  // 0-255
     var antiWindEnabled: Bool = false
     var antiWindValue: Int = 0
-    var comfortModeEnabled: Bool = false
     var adaptiveModeEnabled: Bool = false
 
     // MARK: - Transparent Hearing
@@ -86,7 +85,6 @@ final class DeviceState {
         ancTransparencyLevel = 0
         antiWindEnabled = false
         antiWindValue = 0
-        comfortModeEnabled = false
         adaptiveModeEnabled = false
         transparentHearingEnabled = false
         bassBoostEnabled = false
