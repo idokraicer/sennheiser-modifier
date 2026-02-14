@@ -9,19 +9,25 @@ final class HeadphoneViewModel {
     let state: DeviceState
     private let connection: GAIAConnection
     private let scanner: BLEScanner
+    private let monitor: BluetoothMonitor
     private let logger = Logger(subsystem: "com.momentumcontrol", category: "ViewModel")
 
     /// Debounce task for transparency slider
     private var transparencyDebounceTask: Task<Void, Never>?
 
+    /// Tracks the last ANC zone sent to the headset to avoid redundant mode-switch commands.
+    private var lastSentZone: ANCMode?
+
     init(transport: BluetoothTransport? = nil) {
         self.state = DeviceState()
         self.scanner = BLEScanner()
+        self.monitor = BluetoothMonitor()
 
         let actualTransport = transport ?? RFCOMMChannel()
         self.connection = GAIAConnection(transport: actualTransport)
 
         setupResponseHandler()
+        setupBluetoothMonitor()
     }
 
     // MARK: - Response Handling
@@ -37,6 +43,7 @@ final class HeadphoneViewModel {
             Task { @MainActor in
                 guard let self else { return }
                 self.logger.info("Device disconnected unexpectedly")
+                self.lastSentZone = nil
                 self.state.reset()
             }
         }
@@ -50,6 +57,35 @@ final class HeadphoneViewModel {
             connection.sendGet(for: .transparentHearingStatus)
             connection.sendGet(for: .ancTransparency)
             connection.sendGet(for: .anc)
+        }
+    }
+
+    private func setupBluetoothMonitor() {
+        monitor.onDeviceConnected = { [weak self] name, address in
+            Task { @MainActor in
+                guard let self else { return }
+                // Don't reconnect if already connected
+                guard !self.connection.isConnected else {
+                    self.logger.info("Monitor: ignoring connect, already connected")
+                    return
+                }
+                self.logger.info("Monitor: auto-connecting to \(name) at \(address)")
+                self.state.deviceName = name
+                await self.connect(to: address)
+            }
+        }
+
+        monitor.onDeviceDisconnected = { [weak self] in
+            Task { @MainActor in
+                guard let self else { return }
+                self.logger.info("Monitor: device disconnected, resetting state")
+                self.lastSentZone = nil
+                if self.connection.isConnected {
+                    self.connection.disconnect()
+                } else {
+                    self.state.reset()
+                }
+            }
         }
     }
 
@@ -86,6 +122,7 @@ final class HeadphoneViewModel {
         case "ANC_Status":
             if let v = values.first?.asUInt8 {
                 state.ancEnabled = v == 0x01
+                lastSentZone = nil
                 updateANCMode()
             }
 
@@ -102,6 +139,7 @@ final class HeadphoneViewModel {
         case "TransparentHearing_Status":
             if let v = values.first?.asUInt8 {
                 state.transparentHearingEnabled = v == 0x01
+                lastSentZone = nil
                 updateANCMode()
             }
 
@@ -239,6 +277,7 @@ final class HeadphoneViewModel {
 
     func disconnect() {
         connection.disconnect()
+        lastSentZone = nil
         state.reset()
     }
 
@@ -301,46 +340,6 @@ final class HeadphoneViewModel {
         connection.sendSet(for: .anc, values: [.uint8(0x01), .uint8(UInt8(clamping: value))])
     }
 
-    /// Maps a unified slider value (0–100) to ANC mode + transparency commands.
-    /// 0–39 = ANC zone, 40–60 = Off zone, 61–100 = Transparency zone.
-    func setUnifiedSliderValue(_ value: Double) {
-        if value <= 39 {
-            // ANC zone
-            let transparencyLevel = Int(value / 39.0 * 100.0)
-            state.ancEnabled = true
-            state.transparentHearingEnabled = false
-            state.ancTransparencyLevel = transparencyLevel
-            state.ancMode = .anc
-
-            connection.sendSet(for: .ancStatus, values: [.uint8(0x01)])
-            connection.sendSet(for: .transparentHearingStatus, values: [.uint8(0x00)])
-
-            // Debounce the transparency level
-            transparencyDebounceTask?.cancel()
-            transparencyDebounceTask = Task { @MainActor in
-                try? await Task.sleep(for: .seconds(0.3))
-                guard !Task.isCancelled else { return }
-                connection.sendSet(for: .ancTransparency, values: [.uint8(UInt8(clamping: min(transparencyLevel, 100)))])
-            }
-        } else if value >= 61 {
-            // Transparency zone
-            state.ancEnabled = false
-            state.transparentHearingEnabled = true
-            state.ancMode = .transparency
-
-            connection.sendSet(for: .ancStatus, values: [.uint8(0x00)])
-            connection.sendSet(for: .transparentHearingStatus, values: [.uint8(0x01)])
-        } else {
-            // Off zone (40–60)
-            state.ancEnabled = false
-            state.transparentHearingEnabled = false
-            state.ancMode = .off
-
-            connection.sendSet(for: .ancStatus, values: [.uint8(0x00)])
-            connection.sendSet(for: .transparentHearingStatus, values: [.uint8(0x00)])
-        }
-    }
-
     /// Human-readable label for the current unified slider position.
     func unifiedSliderLabel(for value: Double) -> String {
         if value <= 39 {
@@ -357,6 +356,99 @@ final class HeadphoneViewModel {
     /// Whether the slider is in the ANC zone (for showing sub-controls).
     func isInANCZone(value: Double) -> Bool {
         value <= 39
+    }
+
+    /// Derive the ANC zone from a unified slider value.
+    private func zoneForSliderValue(_ value: Double) -> ANCMode {
+        if value <= 39 { return .anc }
+        if value >= 61 { return .transparency }
+        return .off
+    }
+
+    /// Called on every drag frame. Updates state for UI, sends Bluetooth commands only on zone change or debounced ANC level.
+    func handleSliderDragging(_ value: Double) {
+        let zone = zoneForSliderValue(value)
+        // Compute ANC transparency level once (only meaningful in .anc zone)
+        let transparencyLevel = zone == .anc ? Int(value / 39.0 * 100.0) : 0
+
+        // Always update state for UI responsiveness
+        switch zone {
+        case .anc:
+            state.ancEnabled = true
+            state.transparentHearingEnabled = false
+            state.ancTransparencyLevel = transparencyLevel
+            state.ancMode = .anc
+        case .transparency:
+            state.ancEnabled = false
+            state.transparentHearingEnabled = true
+            state.ancMode = .transparency
+        case .off:
+            state.ancEnabled = false
+            state.transparentHearingEnabled = false
+            state.ancMode = .off
+        }
+
+        // Only send mode-switch commands when zone actually changes
+        if zone != lastSentZone {
+            lastSentZone = zone
+            switch zone {
+            case .anc:
+                connection.sendSet(for: .ancStatus, values: [.uint8(0x01)])
+                connection.sendSet(for: .transparentHearingStatus, values: [.uint8(0x00)])
+            case .transparency:
+                connection.sendSet(for: .ancStatus, values: [.uint8(0x00)])
+                connection.sendSet(for: .transparentHearingStatus, values: [.uint8(0x01)])
+            case .off:
+                connection.sendSet(for: .ancStatus, values: [.uint8(0x00)])
+                connection.sendSet(for: .transparentHearingStatus, values: [.uint8(0x00)])
+            }
+        }
+
+        // Debounce ANC transparency level within ANC zone
+        if zone == .anc {
+            transparencyDebounceTask?.cancel()
+            transparencyDebounceTask = Task { @MainActor in
+                try? await Task.sleep(for: .seconds(0.3))
+                guard !Task.isCancelled else { return }
+                connection.sendSet(for: .ancTransparency, values: [.uint8(UInt8(clamping: min(transparencyLevel, 100)))])
+            }
+        }
+    }
+
+    /// Called on drag end. Sends the definitive commands so headset matches final UI state.
+    func commitSliderValue(_ value: Double) {
+        let zone = zoneForSliderValue(value)
+        lastSentZone = zone
+
+        switch zone {
+        case .anc:
+            let transparencyLevel = Int(value / 39.0 * 100.0)
+            state.ancEnabled = true
+            state.transparentHearingEnabled = false
+            state.ancTransparencyLevel = transparencyLevel
+            state.ancMode = .anc
+
+            connection.sendSet(for: .ancStatus, values: [.uint8(0x01)])
+            connection.sendSet(for: .transparentHearingStatus, values: [.uint8(0x00)])
+
+            // Cancel any pending debounce — send exact level immediately
+            transparencyDebounceTask?.cancel()
+            connection.sendSet(for: .ancTransparency, values: [.uint8(UInt8(clamping: min(transparencyLevel, 100)))])
+        case .transparency:
+            state.ancEnabled = false
+            state.transparentHearingEnabled = true
+            state.ancMode = .transparency
+
+            connection.sendSet(for: .ancStatus, values: [.uint8(0x00)])
+            connection.sendSet(for: .transparentHearingStatus, values: [.uint8(0x01)])
+        case .off:
+            state.ancEnabled = false
+            state.transparentHearingEnabled = false
+            state.ancMode = .off
+
+            connection.sendSet(for: .ancStatus, values: [.uint8(0x00)])
+            connection.sendSet(for: .transparentHearingStatus, values: [.uint8(0x00)])
+        }
     }
 
     func setAdaptiveANC(enabled: Bool) {
