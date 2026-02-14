@@ -33,6 +33,14 @@ final class HeadphoneViewModel {
             }
         }
 
+        connection.onDisconnected = { [weak self] in
+            Task { @MainActor in
+                guard let self else { return }
+                self.logger.info("Device disconnected unexpectedly")
+                self.state.reset()
+            }
+        }
+
         connection.onUnknownPacket = { [weak self] vendorID, commandID, _ in
             guard let self, vendorID == Constants.sennheiserVendorID else { return }
             // Unknown Sennheiser notification — re-fetch ANC/Transparency state
@@ -351,10 +359,20 @@ final class HeadphoneViewModel {
 
     func setAutoCall(enabled: Bool) {
         connection.sendSet(for: .autoCall, values: [.uint8(enabled ? 0x01 : 0x00)])
+        // Re-fetch after SET since device sends empty ACK
+        Task { @MainActor in
+            try? await Task.sleep(for: .seconds(0.5))
+            connection.sendGet(for: .autoCall)
+        }
     }
 
     func setComfortCall(enabled: Bool) {
         connection.sendSet(for: .comfortCall, values: [.uint8(enabled ? 0x01 : 0x00)])
+        // Re-fetch after SET since device sends empty ACK
+        Task { @MainActor in
+            try? await Task.sleep(for: .seconds(0.5))
+            connection.sendGet(for: .comfortCall)
+        }
     }
 
     // MARK: - Paired Devices

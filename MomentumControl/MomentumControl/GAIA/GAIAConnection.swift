@@ -18,6 +18,9 @@ final class GAIAConnection {
     /// Callback when an unrecognized packet is received (vendor, command, payload)
     var onUnknownPacket: ((UInt16, UInt16, Data) -> Void)?
 
+    /// Callback when the transport disconnects (remote device lost)
+    var onDisconnected: (() -> Void)?
+
     /// Whether the transport is currently connected
     var isConnected: Bool { transport.isConnected }
 
@@ -36,6 +39,7 @@ final class GAIAConnection {
         transport.onDisconnected = { [weak self] in
             self?.logger.info("Transport disconnected")
             self?.receiveBuffer.removeAll()
+            self?.onDisconnected?()
         }
     }
 
