@@ -205,6 +205,17 @@ extension GAIAPropertyDefinition {
 
     // MARK: Settings
 
+    static let onHeadDetection = GAIAPropertyDefinition(
+        name: "Setting_OnHeadDetection",
+        getVendorID: 0x0495, getCommandID: 0x0402,
+        getResponseVendorID: 0x0495, getResponseCommandID: 0x0502,
+        valueTypes: [.uint8],
+        setVendorID: 0x0495, setCommandID: 0x0401,
+        setResponseVendorID: 0x0495, setResponseCommandID: 0x0501,
+        setTypes: [.uint8],
+        notificationVendorID: 0x0495, notificationCommandID: 0x0482
+    )
+
     static let autoCall = GAIAPropertyDefinition(
         name: "Setting_AutoCall",
         getVendorID: 0x0495, getCommandID: 0x080B,
@@ -295,7 +306,7 @@ extension GAIAPropertyDefinition {
         .anc, .ancStatus, .ancTransparency,
         .transparentHearing, .transparentHearingStatus,
         .bassBoost,
-        .autoCall, .comfortCall,
+        .onHeadDetection, .autoCall, .comfortCall,
         .serialNumber, .firmwareVersion, .modelID,
         .pairedDevicesListSize, .pairedDeviceInfo,
         .pairedDeviceConnect, .pairedDeviceDisconnect,

@@ -165,6 +165,11 @@ final class HeadphoneViewModel {
                 state.comfortCallEnabled = v == 0x01
             }
 
+        case "Setting_OnHeadDetection":
+            if let v = values.first?.asUInt8 {
+                state.onHeadDetectionEnabled = v == 0x02
+            }
+
         case "Core_SerialNumber":
             state.serialNumber = values.first?.asString
 
@@ -339,6 +344,7 @@ final class HeadphoneViewModel {
         connection.sendGet(for: .ancTransparency)
         connection.sendGet(for: .transparentHearingStatus)
         connection.sendGet(for: .bassBoost)
+        connection.sendGet(for: .onHeadDetection)
         connection.sendGet(for: .autoCall)
         connection.sendGet(for: .comfortCall)
         connection.sendGet(for: .serialNumber)
@@ -555,6 +561,14 @@ final class HeadphoneViewModel {
         Task { @MainActor in
             try? await Task.sleep(for: .seconds(0.5))
             connection.sendGet(for: .comfortCall)
+        }
+    }
+
+    func setOnHeadDetection(enabled: Bool) {
+        connection.sendSet(for: .onHeadDetection, values: [.uint8(enabled ? 0x01 : 0x00)])
+        Task { @MainActor in
+            try? await Task.sleep(for: .seconds(0.5))
+            connection.sendGet(for: .onHeadDetection)
         }
     }
 

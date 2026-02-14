@@ -35,6 +35,7 @@ final class DeviceState {
     var bassBoostEnabled: Bool = false
 
     // MARK: - Settings
+    var onHeadDetectionEnabled: Bool = false
     var autoCallEnabled: Bool = false
     var comfortCallEnabled: Bool = false
 
@@ -124,6 +125,7 @@ final class DeviceState {
         adaptiveModeEnabled = false
         transparentHearingEnabled = false
         bassBoostEnabled = false
+        onHeadDetectionEnabled = false
         autoCallEnabled = false
         comfortCallEnabled = false
         pairedDeviceCount = 0
