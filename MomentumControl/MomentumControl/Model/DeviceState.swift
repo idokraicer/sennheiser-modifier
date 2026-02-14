@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 
 /// Observable state model for the connected headphone.
 /// All properties are updated from GAIA responses via the ViewModel.
@@ -53,6 +54,46 @@ final class DeviceState {
         case 35..<65: return "battery.50"
         case 65..<90: return "battery.75"
         default: return "battery.100"
+        }
+    }
+
+    /// Unified slider value (0–100).
+    /// 0–39 = ANC zone, 40–60 = Off zone, 61–100 = Transparency zone.
+    var unifiedSliderValue: Double {
+        if transparentHearingEnabled {
+            return 61.0 + 39.0 // Full transparency = 100
+        } else if ancEnabled {
+            let mapped = Double(ancTransparencyLevel) / 100.0 * 39.0
+            return mapped
+        } else {
+            return 50.0 // Off
+        }
+    }
+
+    /// Dynamic accent color based on current ANC mode.
+    var ancAccentColor: Color {
+        if adaptiveModeEnabled {
+            return Color(red: 0.55, green: 0.45, blue: 0.85) // Soft purple
+        }
+        if transparentHearingEnabled {
+            return Color(red: 0.9, green: 0.65, blue: 0.3)   // Warm amber
+        }
+        if ancEnabled {
+            return Color(red: 0.3, green: 0.6, blue: 0.95)   // Cool blue
+        }
+        return Color.gray
+    }
+
+    /// Accent color for a specific unified slider position (for continuous color shift).
+    static func accentColor(forSliderValue value: Double) -> Color {
+        if value <= 39 {
+            let intensity = 1.0 - (value / 39.0) * 0.3
+            return Color(red: 0.3 * intensity, green: 0.6 * intensity, blue: 0.95)
+        } else if value >= 61 {
+            let intensity = 0.7 + ((value - 61.0) / 39.0) * 0.3
+            return Color(red: 0.9 * intensity, green: 0.65 * intensity, blue: 0.3)
+        } else {
+            return Color.gray
         }
     }
 

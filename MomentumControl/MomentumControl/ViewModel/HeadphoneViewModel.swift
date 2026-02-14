@@ -348,6 +348,76 @@ final class HeadphoneViewModel {
         connection.sendSet(for: .anc, values: [.uint8(0x03), .uint8(enabled ? 0x01 : 0x00)])
     }
 
+    /// Maps a unified slider value (0–100) to ANC mode + transparency commands.
+    /// 0–39 = ANC zone, 40–60 = Off zone, 61–100 = Transparency zone.
+    func setUnifiedSliderValue(_ value: Double) {
+        if value <= 39 {
+            // ANC zone
+            let transparencyLevel = Int(value / 39.0 * 100.0)
+            state.ancEnabled = true
+            state.transparentHearingEnabled = false
+            state.ancTransparencyLevel = transparencyLevel
+            state.ancMode = .anc
+
+            connection.sendSet(for: .ancStatus, values: [.uint8(0x01)])
+            connection.sendSet(for: .transparentHearingStatus, values: [.uint8(0x00)])
+
+            // Debounce the transparency level
+            transparencyDebounceTask?.cancel()
+            transparencyDebounceTask = Task { @MainActor in
+                try? await Task.sleep(for: .seconds(0.3))
+                guard !Task.isCancelled else { return }
+                connection.sendSet(for: .ancTransparency, values: [.uint8(UInt8(clamping: min(transparencyLevel, 100)))])
+            }
+        } else if value >= 61 {
+            // Transparency zone
+            state.ancEnabled = false
+            state.transparentHearingEnabled = true
+            state.ancMode = .transparency
+
+            connection.sendSet(for: .ancStatus, values: [.uint8(0x00)])
+            connection.sendSet(for: .transparentHearingStatus, values: [.uint8(0x01)])
+        } else {
+            // Off zone (40–60)
+            state.ancEnabled = false
+            state.transparentHearingEnabled = false
+            state.ancMode = .off
+
+            connection.sendSet(for: .ancStatus, values: [.uint8(0x00)])
+            connection.sendSet(for: .transparentHearingStatus, values: [.uint8(0x00)])
+        }
+    }
+
+    /// Human-readable label for the current unified slider position.
+    func unifiedSliderLabel(for value: Double) -> String {
+        if value <= 39 {
+            let pct = Int((1.0 - value / 39.0) * 100)
+            return "ANC \(pct)%"
+        } else if value >= 61 {
+            let pct = Int((value - 61.0) / 39.0 * 100)
+            return "Transparency \(pct)%"
+        } else {
+            return "Off"
+        }
+    }
+
+    /// Whether the slider is in the ANC zone (for showing sub-controls).
+    func isInANCZone(value: Double) -> Bool {
+        value <= 39
+    }
+
+    func setAdaptiveANC(enabled: Bool) {
+        state.adaptiveModeEnabled = enabled
+        connection.sendSet(for: .anc, values: [.uint8(0x03), .uint8(enabled ? 0x01 : 0x00)])
+        if enabled {
+            state.ancEnabled = true
+            state.transparentHearingEnabled = false
+            state.ancMode = .anc
+            connection.sendSet(for: .ancStatus, values: [.uint8(0x01)])
+            connection.sendSet(for: .transparentHearingStatus, values: [.uint8(0x00)])
+        }
+    }
+
     func setBassBoost(enabled: Bool) {
         connection.sendSet(for: .bassBoost, values: [.uint8(enabled ? 0x01 : 0x00)])
     }
