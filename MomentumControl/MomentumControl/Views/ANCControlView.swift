@@ -51,10 +51,14 @@ struct ANCControlView: View {
             // Unified slider
             UnifiedANCSlider(
                 value: $sliderValue,
-                isDisabled: viewModel.state.adaptiveModeEnabled
-            ) { newValue in
-                viewModel.setUnifiedSliderValue(newValue)
-            }
+                isDisabled: viewModel.state.adaptiveModeEnabled,
+                onDragging: { newValue in
+                    viewModel.handleSliderDragging(newValue)
+                },
+                onCommit: { finalValue in
+                    viewModel.commitSliderValue(finalValue)
+                }
+            )
 
             // Conditional anti-wind (ANC zone only, adaptive off)
             if showAntiWind {

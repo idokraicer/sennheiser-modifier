@@ -5,7 +5,11 @@ import SwiftUI
 struct UnifiedANCSlider: View {
     @Binding var value: Double
     var isDisabled: Bool = false
-    var onChanged: ((Double) -> Void)?
+    var onDragging: ((Double) -> Void)?
+    var onCommit: ((Double) -> Void)?
+
+    @State private var thumbScale: CGFloat = 1.0
+    @State private var currentZone: Int = 1 // 0=ANC, 1=Off, 2=Transparency
 
     private var accentColor: Color {
         DeviceState.accentColor(forSliderValue: value)
@@ -34,6 +38,7 @@ struct UnifiedANCSlider: View {
                         .fill(accentColor)
                         .frame(width: thumbSize, height: thumbSize)
                         .shadow(color: accentColor.opacity(0.4), radius: 4, y: 2)
+                        .scaleEffect(thumbScale)
                         .offset(x: thumbOffset(in: geometry.size.width, thumbSize: thumbSize))
                 }
                 .frame(height: trackHeight)
@@ -44,7 +49,24 @@ struct UnifiedANCSlider: View {
                             let fraction = max(0, min(1, drag.location.x / geometry.size.width))
                             let snapped = snapToCenter(fraction * 100)
                             value = snapped
-                            onChanged?(snapped)
+
+                            // Zone-change detent feedback
+                            let newZone = zoneIndex(for: snapped)
+                            if newZone != currentZone {
+                                currentZone = newZone
+                                withAnimation(.spring(response: 0.15, dampingFraction: 0.5)) {
+                                    thumbScale = 1.15
+                                }
+                                withAnimation(.spring(response: 0.15, dampingFraction: 0.5).delay(0.1)) {
+                                    thumbScale = 1.0
+                                }
+                            }
+
+                            onDragging?(snapped)
+                        }
+                        .onEnded { _ in
+                            guard !isDisabled else { return }
+                            onCommit?(value)
                         }
                 )
                 .opacity(isDisabled ? 0.4 : 1.0)
@@ -52,23 +74,30 @@ struct UnifiedANCSlider: View {
             }
             .frame(height: 28)
 
-            // Zone labels
-            HStack {
-                Text("ANC")
-                    .font(.caption2)
-                    .fontWeight(value <= 39 ? .semibold : .regular)
-                    .foregroundStyle(value <= 39 ? accentColor : .secondary)
-                Spacer()
-                Text("Off")
-                    .font(.caption2)
-                    .fontWeight(value > 39 && value < 61 ? .semibold : .regular)
-                    .foregroundStyle(value > 39 && value < 61 ? .primary : .secondary)
-                Spacer()
-                Text("Transparency")
-                    .font(.caption2)
-                    .fontWeight(value >= 61 ? .semibold : .regular)
-                    .foregroundStyle(value >= 61 ? accentColor : .secondary)
+            // Zone labels — positioned at each zone's center
+            GeometryReader { geometry in
+                let width = geometry.size.width
+                ZStack {
+                    Text("ANC")
+                        .font(.caption2)
+                        .fontWeight(value <= 39 ? .semibold : .regular)
+                        .foregroundStyle(value <= 39 ? accentColor : .secondary)
+                        .position(x: width * 0.195, y: 6)
+
+                    Text("Off")
+                        .font(.caption2)
+                        .fontWeight(value > 39 && value < 61 ? .semibold : .regular)
+                        .foregroundStyle(value > 39 && value < 61 ? .primary : .secondary)
+                        .position(x: width * 0.5, y: 6)
+
+                    Text("Transparency")
+                        .font(.caption2)
+                        .fontWeight(value >= 61 ? .semibold : .regular)
+                        .foregroundStyle(value >= 61 ? accentColor : .secondary)
+                        .position(x: width * 0.805, y: 6)
+                }
             }
+            .frame(height: 12)
         }
         .animation(.easeInOut(duration: 0.3), value: value)
     }
@@ -84,5 +113,12 @@ struct UnifiedANCSlider: View {
             return 50
         }
         return rawValue
+    }
+
+    /// Zone index for detent detection: 0=ANC, 1=Off, 2=Transparency
+    private func zoneIndex(for value: Double) -> Int {
+        if value <= 39 { return 0 }
+        if value >= 61 { return 2 }
+        return 1
     }
 }
