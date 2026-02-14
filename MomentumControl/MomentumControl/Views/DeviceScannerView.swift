@@ -27,6 +27,17 @@ struct DeviceScannerView: View {
                 }
             }
 
+            // Monitoring indicator
+            if viewModel.state.connectionStatus == .disconnected {
+                HStack(spacing: 6) {
+                    ProgressView()
+                        .controlSize(.small)
+                    Text("Monitoring for devices...")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+
             // Known Sennheiser devices
             let knownDevices = MACResolver.listSennheiserDevices()
             if !knownDevices.isEmpty {
