@@ -122,7 +122,6 @@ final class HeadphoneViewModel {
         case "ANC_Status":
             if let v = values.first?.asUInt8 {
                 state.ancEnabled = v == 0x01
-                lastSentZone = nil
                 updateANCMode()
             }
 
@@ -139,7 +138,6 @@ final class HeadphoneViewModel {
         case "TransparentHearing_Status":
             if let v = values.first?.asUInt8 {
                 state.transparentHearingEnabled = v == 0x01
-                lastSentZone = nil
                 updateANCMode()
             }
 
@@ -415,11 +413,11 @@ final class HeadphoneViewModel {
         }
     }
 
-    /// Called on drag end. Sends the definitive commands so headset matches final UI state.
+    /// Called on drag end. Sends definitive transparency level; only sends mode commands if zone wasn't already set during drag.
     func commitSliderValue(_ value: Double) {
         let zone = zoneForSliderValue(value)
-        lastSentZone = zone
 
+        // Update state
         switch zone {
         case .anc:
             let transparencyLevel = Int(value / 39.0 * 100.0)
@@ -427,27 +425,39 @@ final class HeadphoneViewModel {
             state.transparentHearingEnabled = false
             state.ancTransparencyLevel = transparencyLevel
             state.ancMode = .anc
-
-            connection.sendSet(for: .ancStatus, values: [.uint8(0x01)])
-            connection.sendSet(for: .transparentHearingStatus, values: [.uint8(0x00)])
-
-            // Cancel any pending debounce — send exact level immediately
-            transparencyDebounceTask?.cancel()
-            connection.sendSet(for: .ancTransparency, values: [.uint8(UInt8(clamping: min(transparencyLevel, 100)))])
         case .transparency:
             state.ancEnabled = false
             state.transparentHearingEnabled = true
             state.ancMode = .transparency
-
-            connection.sendSet(for: .ancStatus, values: [.uint8(0x00)])
-            connection.sendSet(for: .transparentHearingStatus, values: [.uint8(0x01)])
         case .off:
             state.ancEnabled = false
             state.transparentHearingEnabled = false
             state.ancMode = .off
+        }
 
-            connection.sendSet(for: .ancStatus, values: [.uint8(0x00)])
-            connection.sendSet(for: .transparentHearingStatus, values: [.uint8(0x00)])
+        // Only send mode-switch if zone changed since last drag frame
+        // (handleSliderDragging already sent mode commands during drag;
+        // re-sending here can cause the headphones to reset ANC_Transparency)
+        if zone != lastSentZone {
+            lastSentZone = zone
+            switch zone {
+            case .anc:
+                connection.sendSet(for: .ancStatus, values: [.uint8(0x01)])
+                connection.sendSet(for: .transparentHearingStatus, values: [.uint8(0x00)])
+            case .transparency:
+                connection.sendSet(for: .ancStatus, values: [.uint8(0x00)])
+                connection.sendSet(for: .transparentHearingStatus, values: [.uint8(0x01)])
+            case .off:
+                connection.sendSet(for: .ancStatus, values: [.uint8(0x00)])
+                connection.sendSet(for: .transparentHearingStatus, values: [.uint8(0x00)])
+            }
+        }
+
+        // Always send the definitive transparency level in ANC zone
+        if zone == .anc {
+            let transparencyLevel = Int(value / 39.0 * 100.0)
+            transparencyDebounceTask?.cancel()
+            connection.sendSet(for: .ancTransparency, values: [.uint8(UInt8(clamping: min(transparencyLevel, 100)))])
         }
     }
 
