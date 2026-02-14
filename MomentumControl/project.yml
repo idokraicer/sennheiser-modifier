@@ -24,6 +24,7 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.momentumcontrol.app
         INFOPLIST_FILE: Info.plist
         CODE_SIGN_ENTITLEMENTS: MomentumControl.entitlements
+        CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION: "YES"
         PRODUCT_NAME: MomentumControl
         GENERATE_INFOPLIST_FILE: false
         LD_RUNPATH_SEARCH_PATHS:

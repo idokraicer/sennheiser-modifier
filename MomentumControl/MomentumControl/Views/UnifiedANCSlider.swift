@@ -131,9 +131,14 @@ struct UnifiedANCSlider: View {
         return (value / 100.0) * usable
     }
 
-    /// Snap to center (50) when near the ANC/Transparency boundary.
+    /// Snap to center (50) only when crossing into the boundary zone from outside.
+    /// Once inside the 48–52 range, allow free movement to prevent trapping
+    /// scroll gestures (small deltas would otherwise loop: 50 → 50.5 → snap → 50).
     private func snapToCenter(_ rawValue: Double) -> Double {
-        if rawValue > 48 && rawValue < 52 {
+        let inSnapZone = rawValue > 48 && rawValue < 52
+        let wasOutsideANC = value < 48
+        let wasOutsideTrans = value > 52
+        if inSnapZone && (wasOutsideANC || wasOutsideTrans) {
             return 50
         }
         return rawValue
