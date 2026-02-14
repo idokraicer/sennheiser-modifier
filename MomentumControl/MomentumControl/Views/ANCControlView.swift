@@ -6,6 +6,10 @@ struct ANCControlView: View {
     @State private var sliderValue: Double = 50
     @State private var isDragging: Bool = false
 
+    private var isOff: Bool {
+        viewModel.state.ancMode == .off
+    }
+
     private var accentColor: Color {
         if viewModel.state.adaptiveModeEnabled {
             return viewModel.state.ancAccentColor
@@ -14,14 +18,20 @@ struct ANCControlView: View {
     }
 
     private var showAntiWind: Bool {
-        !viewModel.state.adaptiveModeEnabled && viewModel.isInANCZone(value: sliderValue)
+        !viewModel.state.adaptiveModeEnabled && !isOff
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             // Top row: label + adaptive toggle
             HStack {
-                if viewModel.state.adaptiveModeEnabled {
+                if isOff {
+                    Text("Off")
+                        .font(.caption)
+                        .fontWeight(.medium)
+                        .foregroundStyle(.secondary)
+                        .monospacedDigit()
+                } else if viewModel.state.adaptiveModeEnabled {
                     Text("Adaptive ANC")
                         .font(.caption)
                         .fontWeight(.medium)
@@ -36,6 +46,17 @@ struct ANCControlView: View {
                 }
 
                 Spacer()
+
+                // Off toggle pill
+                PillToggle(
+                    title: "Off",
+                    systemImage: "power",
+                    isOn: Binding(
+                        get: { isOff },
+                        set: { viewModel.setOff(enabled: $0) }
+                    ),
+                    accentColor: .gray
+                )
 
                 // Adaptive toggle pill
                 PillToggle(
@@ -63,7 +84,7 @@ struct ANCControlView: View {
                 }
             )
 
-            // Conditional anti-wind (ANC zone only, adaptive off)
+            // Anti-wind: visible in ANC and Transparency modes, hidden in Adaptive/Off
             if showAntiWind {
                 PillToggle(
                     title: "Anti-Wind",
@@ -99,6 +120,10 @@ struct ANCControlView: View {
             sliderValue = viewModel.state.unifiedSliderValue
         }
         .onChange(of: viewModel.state.transparentHearingEnabled) { _, _ in
+            guard !isDragging else { return }
+            sliderValue = viewModel.state.unifiedSliderValue
+        }
+        .onChange(of: viewModel.state.ancTransparencyLevel) { _, _ in
             guard !isDragging else { return }
             sliderValue = viewModel.state.unifiedSliderValue
         }
