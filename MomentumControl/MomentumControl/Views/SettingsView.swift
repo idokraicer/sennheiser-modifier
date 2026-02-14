@@ -6,24 +6,34 @@ struct SettingsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Call Settings")
-                .font(.subheadline)
+                .font(.caption)
                 .foregroundStyle(.secondary)
 
-            Toggle(isOn: Binding(
-                get: { viewModel.state.autoCallEnabled },
-                set: { viewModel.setAutoCall(enabled: $0) }
-            )) {
-                Label("Auto Answer Call", systemImage: "phone.arrow.up.right")
-            }
-            .font(.callout)
+            HStack(spacing: 8) {
+                PillToggle(
+                    title: "Auto Answer",
+                    systemImage: "phone.arrow.up.right",
+                    isOn: Binding(
+                        get: { viewModel.state.autoCallEnabled },
+                        set: { viewModel.setAutoCall(enabled: $0) }
+                    ),
+                    accentColor: .green
+                )
 
-            Toggle(isOn: Binding(
-                get: { viewModel.state.comfortCallEnabled },
-                set: { viewModel.setComfortCall(enabled: $0) }
-            )) {
-                Label("Comfort Call", systemImage: "phone.circle")
+                PillToggle(
+                    title: "Comfort Call",
+                    systemImage: "phone.circle",
+                    isOn: Binding(
+                        get: { viewModel.state.comfortCallEnabled },
+                        set: { viewModel.setComfortCall(enabled: $0) }
+                    ),
+                    accentColor: .green
+                )
+
+                Spacer()
             }
-            .font(.callout)
         }
+        .padding(12)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
     }
 }

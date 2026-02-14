@@ -6,22 +6,25 @@ struct DeviceScannerView: View {
 
     var body: some View {
         VStack(spacing: 16) {
-            Image(systemName: "headphones")
-                .font(.system(size: 48))
-                .foregroundStyle(.secondary)
+            // Hero icon
+            VStack(spacing: 8) {
+                Image(systemName: "headphones")
+                    .font(.system(size: 40, weight: .light))
+                    .foregroundStyle(.secondary)
 
-            Text("MomentumControl")
-                .font(.headline)
+                Text("MomentumControl")
+                    .font(.headline)
 
-            Text(viewModel.state.connectionStatus.displayText)
-                .font(.caption)
-                .foregroundStyle(.secondary)
+                Text(viewModel.state.connectionStatus.displayText)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
 
-            if case .error(let msg) = viewModel.state.connectionStatus {
-                Text(msg)
-                    .font(.caption2)
-                    .foregroundStyle(.red)
-                    .multilineTextAlignment(.center)
+                if case .error(let msg) = viewModel.state.connectionStatus {
+                    Text(msg)
+                        .font(.caption2)
+                        .foregroundStyle(.red)
+                        .multilineTextAlignment(.center)
+                }
             }
 
             // Known Sennheiser devices
@@ -29,7 +32,7 @@ struct DeviceScannerView: View {
             if !knownDevices.isEmpty {
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Known Devices")
-                        .font(.subheadline)
+                        .font(.caption)
                         .foregroundStyle(.secondary)
 
                     ForEach(knownDevices, id: \.address) { device in
@@ -39,9 +42,11 @@ struct DeviceScannerView: View {
                                 await viewModel.connect(to: device.address)
                             }
                         } label: {
-                            HStack {
+                            HStack(spacing: 10) {
                                 Image(systemName: "headphones")
-                                VStack(alignment: .leading) {
+                                    .font(.callout)
+                                    .foregroundStyle(.secondary)
+                                VStack(alignment: .leading, spacing: 1) {
                                     Text(device.name)
                                         .font(.callout)
                                     Text(device.address)
@@ -50,10 +55,12 @@ struct DeviceScannerView: View {
                                 }
                                 Spacer()
                                 Image(systemName: "arrow.right.circle")
+                                    .foregroundStyle(.tertiary)
                             }
+                            .padding(10)
+                            .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
                         }
                         .buttonStyle(.plain)
-                        .padding(.vertical, 4)
                     }
                 }
             }
@@ -81,9 +88,11 @@ struct DeviceScannerView: View {
                             }
                         }
                     } label: {
-                        HStack {
+                        HStack(spacing: 10) {
                             Image(systemName: "antenna.radiowaves.left.and.right")
-                            VStack(alignment: .leading) {
+                                .font(.callout)
+                                .foregroundStyle(.secondary)
+                            VStack(alignment: .leading, spacing: 1) {
                                 Text(device.name)
                                     .font(.callout)
                                 Text("RSSI: \(device.rssi)")
@@ -92,6 +101,8 @@ struct DeviceScannerView: View {
                             }
                             Spacer()
                         }
+                        .padding(10)
+                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
                     }
                     .buttonStyle(.plain)
                 }
@@ -111,7 +122,6 @@ struct DeviceScannerView: View {
             }
         }
         .task {
-            // Try auto-connect on launch
             await viewModel.autoConnect()
         }
     }

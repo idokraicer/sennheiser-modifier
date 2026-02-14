@@ -2,37 +2,42 @@ import SwiftUI
 
 struct PopoverContentView: View {
     @Bindable var viewModel: HeadphoneViewModel
+    @State private var isMoreExpanded = false
 
     var body: some View {
         VStack(spacing: 0) {
             if viewModel.state.connectionStatus.isConnected {
                 ScrollView {
-                    VStack(spacing: 16) {
+                    VStack(spacing: 12) {
                         DeviceHeaderView(state: viewModel.state)
-                        Divider()
                         ANCControlView(viewModel: viewModel)
-                        Divider()
                         QuickTogglesView(viewModel: viewModel)
-                        Divider()
-                        ConnectedDevicesView(viewModel: viewModel)
-                        Divider()
-                        SettingsView(viewModel: viewModel)
+
+                        ExpandableSection(
+                            title: "More",
+                            isExpanded: $isMoreExpanded
+                        ) {
+                            VStack(spacing: 8) {
+                                ConnectedDevicesView(viewModel: viewModel)
+                                SettingsView(viewModel: viewModel)
+                            }
+                        }
                     }
-                    .padding()
+                    .padding(12)
                 }
             } else {
                 DeviceScannerView(viewModel: viewModel)
-                    .padding()
+                    .padding(12)
             }
 
-            Divider()
-
+            // Footer
             HStack {
                 if viewModel.state.connectionStatus.isConnected {
                     Button("Disconnect") {
                         viewModel.disconnect()
                     }
                     .buttonStyle(.plain)
+                    .font(.caption)
                     .foregroundStyle(.secondary)
                 }
                 Spacer()
@@ -40,9 +45,10 @@ struct PopoverContentView: View {
                     NSApplication.shared.terminate(nil)
                 }
                 .buttonStyle(.plain)
+                .font(.caption)
                 .foregroundStyle(.secondary)
             }
-            .padding(.horizontal)
+            .padding(.horizontal, 12)
             .padding(.vertical, 8)
         }
     }

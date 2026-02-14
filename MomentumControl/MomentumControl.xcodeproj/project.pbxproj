@@ -10,6 +10,8 @@
 		03A19BA81EEC110A55B7EE05 /* ANCControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1840CDBA124F795C0447D47 /* ANCControlView.swift */; };
 		097EA882E9C387AB4818A0E4 /* BluetoothTransport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42819BE38757F939038FD991 /* BluetoothTransport.swift */; };
 		147CF10E61F8A0C3127F7595 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5ABFC7611BFE867B449E2AF /* Constants.swift */; };
+		1574EE040ED44EF96C76F42A /* WaveformTrackShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = D689FDB434B681245C99FC69 /* WaveformTrackShape.swift */; };
+		2A3FC090255DFEF8DF3BA781 /* ExpandableSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181FB6569841366190CCE703 /* ExpandableSection.swift */; };
 		333BEC2FA33A40EA35296F9B /* DataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EB0E08DEFA1E4A17E57E0E9 /* DataExtensions.swift */; };
 		38B8C4266EB41815550FAE3D /* HeadphoneViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E69E2024F08AB97114956D /* HeadphoneViewModel.swift */; };
 		3A995E5A5AAB55B058474CEA /* GAIAPacket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7319DB61992DBDF17E027A3A /* GAIAPacket.swift */; };
@@ -25,7 +27,9 @@
 		77ABBED4703574E49355EAF3 /* ConnectionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2194ED5FD88E3FC5C5C5CB57 /* ConnectionStatus.swift */; };
 		807D8BE3D05B6CB222D336C1 /* DeviceHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D25A8AC7DA01B3DA982359C1 /* DeviceHeaderView.swift */; };
 		83F0C3C881746441790C9E17 /* PairedDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7753E2AF0ECE197F817C9D3 /* PairedDevice.swift */; };
+		9F2A06A985DBB41906EF13BA /* PillToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = F898EC4DABC37163E93967A4 /* PillToggle.swift */; };
 		A814299DA0442838C98BC692 /* DeviceState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0080AD481E438456E786271 /* DeviceState.swift */; };
+		B7C541F177A23A7EFB56E09E /* UnifiedANCSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C8768E23517744381DD222 /* UnifiedANCSlider.swift */; };
 		B9A80A7D74262AF76F1C3F23 /* GAIAPropertyDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC2B239433DD5ED9BBAC7DC8 /* GAIAPropertyDefinition.swift */; };
 		C7D7E73B7840126265B1AEE1 /* ANCMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49379A50FA5F7BE0CCB21703 /* ANCMode.swift */; };
 		CA47695E0995D3FCDAEA274B /* ConnectedDevicesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5D6B34D0DC7EF5BC43140D5 /* ConnectedDevicesView.swift */; };
@@ -37,6 +41,7 @@
 		EA36685937D9480CADD29D5E /* MACResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49ACE9C63BFA3C9B091795AD /* MACResolver.swift */; };
 		EBC8247B97325915BF8BADDE /* PopoverContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF344A70ABC51480475DEEE4 /* PopoverContentView.swift */; };
 		F8259E837C8C94F49696F7B5 /* GAIAValueParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4217EA5F2F18F34B72BF17DB /* GAIAValueParserTests.swift */; };
+		F9B297F84EE105B1973AC95B /* BatteryRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014AC47D80A54BC8C314728C /* BatteryRingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,8 +55,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		014AC47D80A54BC8C314728C /* BatteryRingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryRingView.swift; sourceTree = "<group>"; };
 		0EB0E08DEFA1E4A17E57E0E9 /* DataExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensions.swift; sourceTree = "<group>"; };
 		142C16BD5B46B851E85C0A98 /* MenuBarIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarIcon.swift; sourceTree = "<group>"; };
+		181FB6569841366190CCE703 /* ExpandableSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableSection.swift; sourceTree = "<group>"; };
 		2194ED5FD88E3FC5C5C5CB57 /* ConnectionStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionStatus.swift; sourceTree = "<group>"; };
 		36EF27706FAEE2AB22A21A29 /* BLEScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEScanner.swift; sourceTree = "<group>"; };
 		4217EA5F2F18F34B72BF17DB /* GAIAValueParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GAIAValueParserTests.swift; sourceTree = "<group>"; };
@@ -65,6 +72,7 @@
 		7319DB61992DBDF17E027A3A /* GAIAPacket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GAIAPacket.swift; sourceTree = "<group>"; };
 		7E4490CCC991CBE842A6322F /* GAIAPropertyRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GAIAPropertyRegistry.swift; sourceTree = "<group>"; };
 		858948E832CDC8C704F5F318 /* MomentumControlTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MomentumControlTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		87C8768E23517744381DD222 /* UnifiedANCSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnifiedANCSlider.swift; sourceTree = "<group>"; };
 		9852C13107A28D523C365F25 /* IOBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = IOBluetooth.framework; sourceTree = "<group>"; };
 		9F8CFC539E0F77E3C6FF6D07 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		9FC9AE08B3AE9BB61BE6B7A3 /* QuickTogglesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickTogglesView.swift; sourceTree = "<group>"; };
@@ -77,10 +85,12 @@
 		C714979E04D5D85CE2BCD2F8 /* RFCOMMChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RFCOMMChannel.swift; sourceTree = "<group>"; };
 		CA24C67363E7D8E1205D1C36 /* GAIAValueParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GAIAValueParser.swift; sourceTree = "<group>"; };
 		D25A8AC7DA01B3DA982359C1 /* DeviceHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceHeaderView.swift; sourceTree = "<group>"; };
+		D689FDB434B681245C99FC69 /* WaveformTrackShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveformTrackShape.swift; sourceTree = "<group>"; };
 		D7753E2AF0ECE197F817C9D3 /* PairedDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PairedDevice.swift; sourceTree = "<group>"; };
 		E5D1F8D3E2EB9BBE4627AB2B /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		EF344A70ABC51480475DEEE4 /* PopoverContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverContentView.swift; sourceTree = "<group>"; };
 		F1840CDBA124F795C0447D47 /* ANCControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ANCControlView.swift; sourceTree = "<group>"; };
+		F898EC4DABC37163E93967A4 /* PillToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PillToggle.swift; sourceTree = "<group>"; };
 		F8E69E2024F08AB97114956D /* HeadphoneViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadphoneViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -131,13 +141,18 @@
 			isa = PBXGroup;
 			children = (
 				F1840CDBA124F795C0447D47 /* ANCControlView.swift */,
+				014AC47D80A54BC8C314728C /* BatteryRingView.swift */,
 				C5D6B34D0DC7EF5BC43140D5 /* ConnectedDevicesView.swift */,
 				D25A8AC7DA01B3DA982359C1 /* DeviceHeaderView.swift */,
 				5F6DA632538BE7A9343E7381 /* DeviceScannerView.swift */,
+				181FB6569841366190CCE703 /* ExpandableSection.swift */,
 				142C16BD5B46B851E85C0A98 /* MenuBarIcon.swift */,
+				F898EC4DABC37163E93967A4 /* PillToggle.swift */,
 				EF344A70ABC51480475DEEE4 /* PopoverContentView.swift */,
 				9FC9AE08B3AE9BB61BE6B7A3 /* QuickTogglesView.swift */,
 				9F8CFC539E0F77E3C6FF6D07 /* SettingsView.swift */,
+				87C8768E23517744381DD222 /* UnifiedANCSlider.swift */,
+				D689FDB434B681245C99FC69 /* WaveformTrackShape.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -309,6 +324,7 @@
 				03A19BA81EEC110A55B7EE05 /* ANCControlView.swift in Sources */,
 				C7D7E73B7840126265B1AEE1 /* ANCMode.swift in Sources */,
 				CD145C4E51E78104B74ADD18 /* BLEScanner.swift in Sources */,
+				F9B297F84EE105B1973AC95B /* BatteryRingView.swift in Sources */,
 				097EA882E9C387AB4818A0E4 /* BluetoothTransport.swift in Sources */,
 				CA47695E0995D3FCDAEA274B /* ConnectedDevicesView.swift in Sources */,
 				77ABBED4703574E49355EAF3 /* ConnectionStatus.swift in Sources */,
@@ -317,6 +333,7 @@
 				807D8BE3D05B6CB222D336C1 /* DeviceHeaderView.swift in Sources */,
 				72B9B8000D2EA8D9A4D934DF /* DeviceScannerView.swift in Sources */,
 				A814299DA0442838C98BC692 /* DeviceState.swift in Sources */,
+				2A3FC090255DFEF8DF3BA781 /* ExpandableSection.swift in Sources */,
 				62595C34ED18EC8E6606B90E /* GAIAConnection.swift in Sources */,
 				3A995E5A5AAB55B058474CEA /* GAIAPacket.swift in Sources */,
 				B9A80A7D74262AF76F1C3F23 /* GAIAPropertyDefinition.swift in Sources */,
@@ -327,10 +344,13 @@
 				E69C429910FED079E25C11C4 /* MenuBarIcon.swift in Sources */,
 				6513241200A569BE531689EA /* MomentumControlApp.swift in Sources */,
 				83F0C3C881746441790C9E17 /* PairedDevice.swift in Sources */,
+				9F2A06A985DBB41906EF13BA /* PillToggle.swift in Sources */,
 				EBC8247B97325915BF8BADDE /* PopoverContentView.swift in Sources */,
 				3F27C58317D4A7FE070FE83A /* QuickTogglesView.swift in Sources */,
 				CC0C3B6860522BD814469C98 /* RFCOMMChannel.swift in Sources */,
 				E510CEA52298A4C4E43C5BC8 /* SettingsView.swift in Sources */,
+				B7C541F177A23A7EFB56E09E /* UnifiedANCSlider.swift in Sources */,
+				1574EE040ED44EF96C76F42A /* WaveformTrackShape.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

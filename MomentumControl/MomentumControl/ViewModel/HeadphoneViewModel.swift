@@ -292,49 +292,6 @@ final class HeadphoneViewModel {
 
     // MARK: - User Actions
 
-    func setANCMode(_ mode: ANCMode) {
-        // Optimistic UI update so the picker doesn't snap back
-        switch mode {
-        case .off:
-            state.ancEnabled = false
-            state.transparentHearingEnabled = false
-        case .anc:
-            state.ancEnabled = true
-            state.transparentHearingEnabled = false
-        case .transparency:
-            state.ancEnabled = false
-            state.transparentHearingEnabled = true
-        }
-        state.ancMode = mode
-
-        // Send commands to device.
-        // Use .transparentHearingStatus (SET 0x1804) for on/off control,
-        // NOT .transparentHearing (SET 0x1802) which is the hearing level value.
-        switch mode {
-        case .off:
-            connection.sendSet(for: .ancStatus, values: [.uint8(0x00)])
-            connection.sendSet(for: .transparentHearingStatus, values: [.uint8(0x00)])
-        case .anc:
-            connection.sendSet(for: .ancStatus, values: [.uint8(0x01)])
-            connection.sendSet(for: .transparentHearingStatus, values: [.uint8(0x00)])
-        case .transparency:
-            connection.sendSet(for: .ancStatus, values: [.uint8(0x00)])
-            connection.sendSet(for: .transparentHearingStatus, values: [.uint8(0x01)])
-        }
-    }
-
-    func setTransparencyLevel(_ level: Int) {
-        state.ancTransparencyLevel = level
-
-        // Debounce: wait 1 second before sending (matches C++ QTimer pattern)
-        transparencyDebounceTask?.cancel()
-        transparencyDebounceTask = Task { @MainActor in
-            try? await Task.sleep(for: .seconds(1))
-            guard !Task.isCancelled else { return }
-            connection.sendSet(for: .ancTransparency, values: [.uint8(UInt8(clamping: min(level, 100)))])
-        }
-    }
-
     func setAntiWind(enabled: Bool) {
         // ANC SET uses sub-property format: [index, value]
         connection.sendSet(for: .anc, values: [.uint8(0x01), .uint8(enabled ? 0x01 : 0x00)])
@@ -342,10 +299,6 @@ final class HeadphoneViewModel {
 
     func setAntiWindValue(_ value: Int) {
         connection.sendSet(for: .anc, values: [.uint8(0x01), .uint8(UInt8(clamping: value))])
-    }
-
-    func setAdaptiveMode(enabled: Bool) {
-        connection.sendSet(for: .anc, values: [.uint8(0x03), .uint8(enabled ? 0x01 : 0x00)])
     }
 
     /// Maps a unified slider value (0–100) to ANC mode + transparency commands.
