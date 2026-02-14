@@ -1,0 +1,211 @@
+{
+  "device": "Sennheiser Momentum 4",
+  "protocol": "GAIA v3",
+  "transport": "RFCOMM",
+  "rfcommChannel": 1,
+  "packetHeader": "0xFF03",
+  "vendorIds": {
+    "sennheiser": "0x0495",
+    "qualcomm": "0x001D"
+  },
+  "featureGroups": {
+    "core": { "id": 0, "vendorId": "0x0495" },
+    "device": { "id": 2, "vendorId": "0x0495" },
+    "battery": { "id": 3, "vendorId": "0x0495" },
+    "genericAudio": { "id": 4, "vendorId": "0x0495" },
+    "userEQ": { "id": 8, "vendorId": "0x0495" },
+    "versions": { "id": 9, "vendorId": "0x0495" },
+    "deviceManagement": { "id": 10, "vendorId": "0x0495" },
+    "mmi": { "id": 11, "vendorId": "0x0495" },
+    "transparentHearing": { "id": 12, "vendorId": "0x0495" },
+    "ANC": { "id": 13, "vendorId": "0x0495" }
+  },
+  "properties": {
+    "Battery_Percent": {
+      "featureGroup": "battery",
+      "featureGroupId": 3,
+      "valueTypes": ["uint8", "uint8"],
+      "description": "Battery level. Response: [source, percent]. Source indicates which battery (0=headphone). Percent is 0-100.",
+      "get": { "vendorId": "0x0495", "commandId": "0x0603" },
+      "getResponse": { "vendorId": "0x0495", "commandId": "0x0703" },
+      "notification": { "vendorId": "0x0495", "commandId": "0x0683" }
+    },
+    "Battery_ChargingStatus": {
+      "featureGroup": "battery",
+      "featureGroupId": 3,
+      "valueTypes": ["uint8", "uint8"],
+      "description": "Charging status. Response: [source, isCharging]. isCharging: 0=not charging, 1=charging.",
+      "get": { "vendorId": "0x0495", "commandId": "0x0602" },
+      "getResponse": { "vendorId": "0x0495", "commandId": "0x0702" },
+      "notification": { "vendorId": "0x0495", "commandId": "0x0682" }
+    },
+    "ANC": {
+      "featureGroup": "ANC",
+      "featureGroupId": 13,
+      "valueTypes": ["uint8", "uint8", "uint8", "uint8", "uint8", "uint8"],
+      "description": "ANC compound property. GET response: [mode, antiWind, idx, comfort, idx, adaptive]. SET uses sub-property index: [index, value]. Indices: 0x01=antiWind (0=off, 1=on, 2=auto), 0x03=adaptive (0=off, 1=on).",
+      "get": { "vendorId": "0x0495", "commandId": "0x1A01" },
+      "getResponse": { "vendorId": "0x0495", "commandId": "0x1B01" },
+      "set": { "vendorId": "0x0495", "commandId": "0x1A00" },
+      "setResponse": { "vendorId": "0x0495", "commandId": "0x1B00" },
+      "notification": { "vendorId": "0x0495", "commandId": "0x1A81" }
+    },
+    "ANC_Status": {
+      "featureGroup": "ANC",
+      "featureGroupId": 13,
+      "valueTypes": ["uint8"],
+      "description": "ANC on/off status. 0x00=off, 0x01=on.",
+      "get": { "vendorId": "0x0495", "commandId": "0x1A05" },
+      "getResponse": { "vendorId": "0x0495", "commandId": "0x1B05" },
+      "set": { "vendorId": "0x0495", "commandId": "0x1A04" },
+      "setResponse": { "vendorId": "0x0495", "commandId": "0x1B04" },
+      "notification": { "vendorId": "0x0495", "commandId": "0x1A85" }
+    },
+    "ANC_Transparency": {
+      "featureGroup": "ANC",
+      "featureGroupId": 13,
+      "valueTypes": ["uint8"],
+      "range": { "min": 0, "max": 100 },
+      "semantics": {
+        "0": "Maximum ANC",
+        "50": "Off / neutral",
+        "100": "Maximum transparency"
+      },
+      "description": "ANC/Transparency level using midpoint model. 0=max ANC, 50=off/neutral, 100=max transparency. ANC zone: 0-50, Transparency zone: 50-100.",
+      "get": { "vendorId": "0x0495", "commandId": "0x1A03" },
+      "getResponse": { "vendorId": "0x0495", "commandId": "0x1B03" },
+      "set": { "vendorId": "0x0495", "commandId": "0x1A02" },
+      "setResponse": { "vendorId": "0x0495", "commandId": "0x1B02" },
+      "notification": { "vendorId": "0x0495", "commandId": "0x1A83" }
+    },
+    "TransparentHearing": {
+      "featureGroup": "transparentHearing",
+      "featureGroupId": 12,
+      "valueTypes": ["uint8"],
+      "description": "Transparent hearing level/value (not the on/off status).",
+      "get": { "vendorId": "0x0495", "commandId": "0x1803" },
+      "getResponse": { "vendorId": "0x0495", "commandId": "0x1903" },
+      "set": { "vendorId": "0x0495", "commandId": "0x1802" },
+      "setResponse": { "vendorId": "0x0495", "commandId": "0x1902" },
+      "notification": { "vendorId": "0x0495", "commandId": "0x1883" }
+    },
+    "TransparentHearing_Status": {
+      "featureGroup": "transparentHearing",
+      "featureGroupId": 12,
+      "valueTypes": ["uint8"],
+      "description": "Transparent hearing on/off status. 0x00=off, 0x01=on.",
+      "get": { "vendorId": "0x0495", "commandId": "0x1805" },
+      "getResponse": { "vendorId": "0x0495", "commandId": "0x1905" },
+      "set": { "vendorId": "0x0495", "commandId": "0x1804" },
+      "setResponse": { "vendorId": "0x0495", "commandId": "0x1904" },
+      "notification": { "vendorId": "0x0495", "commandId": "0x1885" }
+    },
+    "Setting_BassBoost": {
+      "featureGroup": "genericAudio",
+      "featureGroupId": 4,
+      "valueTypes": ["uint8"],
+      "description": "Bass boost toggle. 0x00=off, 0x01=on.",
+      "get": { "vendorId": "0x0495", "commandId": "0x1009" },
+      "getResponse": { "vendorId": "0x0495", "commandId": "0x1109" },
+      "set": { "vendorId": "0x0495", "commandId": "0x1008" },
+      "setResponse": { "vendorId": "0x0495", "commandId": "0x1108" },
+      "notification": { "vendorId": "0x0495", "commandId": "0x1089" }
+    },
+    "Setting_AutoCall": {
+      "featureGroup": "device",
+      "featureGroupId": 2,
+      "valueTypes": ["uint8"],
+      "description": "Auto-answer call setting. 0x00=off, 0x01=on.",
+      "get": { "vendorId": "0x0495", "commandId": "0x080B" },
+      "getResponse": { "vendorId": "0x0495", "commandId": "0x090B" },
+      "set": { "vendorId": "0x0495", "commandId": "0x080A" },
+      "setResponse": { "vendorId": "0x0495", "commandId": "0x090A" }
+    },
+    "Setting_ComfortCall": {
+      "featureGroup": "device",
+      "featureGroupId": 2,
+      "valueTypes": ["uint8"],
+      "description": "Comfort call setting (pauses music on call). 0x00=off, 0x01=on.",
+      "get": { "vendorId": "0x0495", "commandId": "0x0815" },
+      "getResponse": { "vendorId": "0x0495", "commandId": "0x0915" },
+      "set": { "vendorId": "0x0495", "commandId": "0x0814" },
+      "setResponse": { "vendorId": "0x0495", "commandId": "0x0914" }
+    },
+    "Core_SerialNumber": {
+      "featureGroup": "core",
+      "featureGroupId": 0,
+      "valueTypes": ["string"],
+      "description": "Device serial number (Qualcomm core property).",
+      "get": { "vendorId": "0x001D", "commandId": "0x0003" },
+      "getResponse": { "vendorId": "0x001D", "commandId": "0x0103" }
+    },
+    "Service_SystemReleaseVersion": {
+      "featureGroup": "versions",
+      "featureGroupId": 9,
+      "valueTypes": ["uint16", "uint16", "uint16"],
+      "description": "Firmware version as [major, minor, patch].",
+      "get": { "vendorId": "0x0495", "commandId": "0x1201" },
+      "getResponse": { "vendorId": "0x0495", "commandId": "0x1301" }
+    },
+    "Versions_ModelId": {
+      "featureGroup": "versions",
+      "featureGroupId": 9,
+      "valueTypes": ["string"],
+      "description": "Device model identifier string.",
+      "get": { "vendorId": "0x0495", "commandId": "0x1206" },
+      "getResponse": { "vendorId": "0x0495", "commandId": "0x1306" }
+    },
+    "PairedDevicesListSize": {
+      "featureGroup": "deviceManagement",
+      "featureGroupId": 10,
+      "valueTypes": ["uint16"],
+      "description": "Number of paired devices in the device's paired list.",
+      "get": { "vendorId": "0x0495", "commandId": "0x1400" },
+      "getResponse": { "vendorId": "0x0495", "commandId": "0x1500" }
+    },
+    "PairedDevicesGetDeviceInfo": {
+      "featureGroup": "deviceManagement",
+      "featureGroupId": 10,
+      "operationType": "invocation",
+      "parameterTypes": ["uint8"],
+      "resultTypes": ["uint8", "uint8", "uint8", "string"],
+      "description": "Get info for a paired device by index. Parameter: [deviceIndex]. Result: [index, unknown, deviceType, name].",
+      "invocation": { "vendorId": "0x0495", "commandId": "0x1401" },
+      "invocationResponse": { "vendorId": "0x0495", "commandId": "0x1501" }
+    },
+    "PairedDevicesConnectDevice": {
+      "featureGroup": "deviceManagement",
+      "featureGroupId": 10,
+      "operationType": "invocation",
+      "parameterTypes": ["uint8"],
+      "description": "Connect to a paired device by index. Parameter: [deviceIndex].",
+      "invocation": { "vendorId": "0x0495", "commandId": "0x1402" },
+      "invocationResponse": { "vendorId": "0x0495", "commandId": "0x1502" }
+    },
+    "PairedDevicesDisconnectDevice": {
+      "featureGroup": "deviceManagement",
+      "featureGroupId": 10,
+      "operationType": "invocation",
+      "parameterTypes": ["uint8"],
+      "description": "Disconnect a paired device by index. Parameter: [deviceIndex].",
+      "invocation": { "vendorId": "0x0495", "commandId": "0x1403" },
+      "invocationResponse": { "vendorId": "0x0495", "commandId": "0x1503" }
+    },
+    "PairedDevicesGetConnectionStatus": {
+      "featureGroup": "deviceManagement",
+      "featureGroupId": 10,
+      "operationType": "invocation",
+      "parameterTypes": ["uint8"],
+      "resultTypes": ["uint8", "uint8"],
+      "description": "Get connection status of a paired device. Parameter: [deviceIndex]. Result: [deviceIndex, connectionStatus]. connectionStatus: 0=disconnected, 1=connected.",
+      "invocation": { "vendorId": "0x0495", "commandId": "0x1404" },
+      "invocationResponse": { "vendorId": "0x0495", "commandId": "0x1504" },
+      "notification": { "vendorId": "0x0495", "commandId": "0x1484" }
+    }
+  },
+  "notificationRegistration": {
+    "description": "Register for push notifications by sending command 0x0007 with the feature group ID as a UINT8 payload.",
+    "vendorId": "0x0495",
+    "commandId": "0x0007"
+  }
+}

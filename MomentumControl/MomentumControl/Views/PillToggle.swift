@@ -24,14 +24,14 @@ struct PillToggle: View {
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 6)
-            .foregroundStyle(isOn ? .white : .secondary)
+            .foregroundStyle(isOn ? accentColor : .secondary)
             .background {
                 Capsule()
-                    .fill(isOn ? accentColor : Color.clear)
+                    .fill(isOn ? accentColor.opacity(0.12) : Color.clear)
             }
             .overlay {
                 Capsule()
-                    .strokeBorder(isOn ? accentColor : Color.secondary.opacity(0.3), lineWidth: 1)
+                    .strokeBorder(isOn ? accentColor.opacity(0.6) : Color.secondary.opacity(0.3), lineWidth: 1)
             }
         }
         .buttonStyle(.plain)

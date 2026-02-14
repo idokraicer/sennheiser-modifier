@@ -11,6 +11,7 @@
 		097EA882E9C387AB4818A0E4 /* BluetoothTransport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42819BE38757F939038FD991 /* BluetoothTransport.swift */; };
 		147CF10E61F8A0C3127F7595 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5ABFC7611BFE867B449E2AF /* Constants.swift */; };
 		1574EE040ED44EF96C76F42A /* WaveformTrackShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = D689FDB434B681245C99FC69 /* WaveformTrackShape.swift */; };
+		1AEC6D7083CD6512E349E826 /* BluetoothMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD834BB0365C697F80F9939B /* BluetoothMonitor.swift */; };
 		2A3FC090255DFEF8DF3BA781 /* ExpandableSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181FB6569841366190CCE703 /* ExpandableSection.swift */; };
 		333BEC2FA33A40EA35296F9B /* DataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EB0E08DEFA1E4A17E57E0E9 /* DataExtensions.swift */; };
 		38B8C4266EB41815550FAE3D /* HeadphoneViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E69E2024F08AB97114956D /* HeadphoneViewModel.swift */; };
@@ -35,6 +36,7 @@
 		CA47695E0995D3FCDAEA274B /* ConnectedDevicesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5D6B34D0DC7EF5BC43140D5 /* ConnectedDevicesView.swift */; };
 		CC0C3B6860522BD814469C98 /* RFCOMMChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C714979E04D5D85CE2BCD2F8 /* RFCOMMChannel.swift */; };
 		CD145C4E51E78104B74ADD18 /* BLEScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36EF27706FAEE2AB22A21A29 /* BLEScanner.swift */; };
+		DE83EC685C793AB2F1AAFDFC /* m4.json in Resources */ = {isa = PBXBuildFile; fileRef = B807ECA34D278A92ED0FB1C1 /* m4.json */; };
 		E510CEA52298A4C4E43C5BC8 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8CFC539E0F77E3C6FF6D07 /* SettingsView.swift */; };
 		E69C429910FED079E25C11C4 /* MenuBarIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142C16BD5B46B851E85C0A98 /* MenuBarIcon.swift */; };
 		E83E1DAE865FB07AE075BC84 /* GAIAValueParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA24C67363E7D8E1205D1C36 /* GAIAValueParser.swift */; };
@@ -79,6 +81,8 @@
 		A5ABFC7611BFE867B449E2AF /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		AC2B239433DD5ED9BBAC7DC8 /* GAIAPropertyDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GAIAPropertyDefinition.swift; sourceTree = "<group>"; };
 		AF13F1748445587D3A9C1A72 /* GAIAPacketTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GAIAPacketTests.swift; sourceTree = "<group>"; };
+		B807ECA34D278A92ED0FB1C1 /* m4.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = m4.json; sourceTree = "<group>"; };
+		BD834BB0365C697F80F9939B /* BluetoothMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothMonitor.swift; sourceTree = "<group>"; };
 		C0080AD481E438456E786271 /* DeviceState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceState.swift; sourceTree = "<group>"; };
 		C2CDF3CB43B762408BC69970 /* GAIAConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GAIAConnection.swift; sourceTree = "<group>"; };
 		C5D6B34D0DC7EF5BC43140D5 /* ConnectedDevicesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectedDevicesView.swift; sourceTree = "<group>"; };
@@ -111,6 +115,7 @@
 			isa = PBXGroup;
 			children = (
 				36EF27706FAEE2AB22A21A29 /* BLEScanner.swift */,
+				BD834BB0365C697F80F9939B /* BluetoothMonitor.swift */,
 				42819BE38757F939038FD991 /* BluetoothTransport.swift */,
 				49ACE9C63BFA3C9B091795AD /* MACResolver.swift */,
 				C714979E04D5D85CE2BCD2F8 /* RFCOMMChannel.swift */,
@@ -219,6 +224,7 @@
 				49379A50FA5F7BE0CCB21703 /* ANCMode.swift */,
 				2194ED5FD88E3FC5C5C5CB57 /* ConnectionStatus.swift */,
 				C0080AD481E438456E786271 /* DeviceState.swift */,
+				B807ECA34D278A92ED0FB1C1 /* m4.json */,
 				D7753E2AF0ECE197F817C9D3 /* PairedDevice.swift */,
 			);
 			path = Model;
@@ -264,6 +270,7 @@
 			buildConfigurationList = 27EE31B5FE6078319629EFE9 /* Build configuration list for PBXNativeTarget "MomentumControl" */;
 			buildPhases = (
 				9D6DE6A8D47DB8B17E178784 /* Sources */,
+				3A4982F18FC5BCCACE8AD341 /* Resources */,
 				2F5C909A2273AC764EF3DB71 /* Frameworks */,
 			);
 			buildRules = (
@@ -306,6 +313,17 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		3A4982F18FC5BCCACE8AD341 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DE83EC685C793AB2F1AAFDFC /* m4.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		34678168030CC174569F61E3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -325,6 +343,7 @@
 				C7D7E73B7840126265B1AEE1 /* ANCMode.swift in Sources */,
 				CD145C4E51E78104B74ADD18 /* BLEScanner.swift in Sources */,
 				F9B297F84EE105B1973AC95B /* BatteryRingView.swift in Sources */,
+				1AEC6D7083CD6512E349E826 /* BluetoothMonitor.swift in Sources */,
 				097EA882E9C387AB4818A0E4 /* BluetoothTransport.swift in Sources */,
 				CA47695E0995D3FCDAEA274B /* ConnectedDevicesView.swift in Sources */,
 				77ABBED4703574E49355EAF3 /* ConnectionStatus.swift in Sources */,

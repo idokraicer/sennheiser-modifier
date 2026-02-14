@@ -23,7 +23,7 @@ final class DeviceState {
     // MARK: - ANC
     var ancEnabled: Bool = false
     var ancMode: ANCMode = .off
-    var ancTransparencyLevel: Int = 0  // 0-255
+    var ancTransparencyLevel: Int = 0  // 0-100 (0=max ANC, 50=off, 100=max transparency)
     var antiWindEnabled: Bool = false
     var antiWindValue: Int = 0
     var adaptiveModeEnabled: Bool = false
@@ -57,16 +57,13 @@ final class DeviceState {
         }
     }
 
-    /// Unified slider value (0–100).
-    /// 0–39 = ANC zone, 40–60 = Off zone, 61–100 = Transparency zone.
+    /// Unified slider value (0–100). Direct 1:1 mapping to device ANC_Transparency value.
+    /// 0–50 = ANC zone (0=max ANC, 50=ANC 0%), 50–100 = Transparency zone (50=0%, 100=max).
     var unifiedSliderValue: Double {
-        if transparentHearingEnabled {
-            return 61.0 + 39.0 // Full transparency = 100
-        } else if ancEnabled {
-            let mapped = Double(ancTransparencyLevel) / 100.0 * 39.0
-            return mapped
+        if transparentHearingEnabled || ancEnabled {
+            return Double(ancTransparencyLevel)
         } else {
-            return 50.0 // Off
+            return 50.0 // Off state shows at midpoint
         }
     }
 
@@ -86,14 +83,12 @@ final class DeviceState {
 
     /// Accent color for a specific unified slider position (for continuous color shift).
     static func accentColor(forSliderValue value: Double) -> Color {
-        if value <= 39 {
-            let intensity = 1.0 - (value / 39.0) * 0.3
+        if value <= 50 {
+            let intensity = 1.0 - (value / 50.0) * 0.3
             return Color(red: 0.3 * intensity, green: 0.6 * intensity, blue: 0.95)
-        } else if value >= 61 {
-            let intensity = 0.7 + ((value - 61.0) / 39.0) * 0.3
-            return Color(red: 0.9 * intensity, green: 0.65 * intensity, blue: 0.3)
         } else {
-            return Color.gray
+            let intensity = 0.7 + ((value - 50.0) / 50.0) * 0.3
+            return Color(red: 0.9 * intensity, green: 0.65 * intensity, blue: 0.3)
         }
     }
 

@@ -2,9 +2,9 @@ import SwiftUI
 
 /// Draws waveform bars along a horizontal track.
 /// `sliderValue` (0–100) controls the waveform shape:
-/// - Near 0 (ANC): bars are compressed/flat
-/// - Near 50 (Off): bars are minimal/dormant
-/// - Near 100 (Transparency): bars are tall/open
+/// - Near 0 (max ANC): bars are compressed/flat
+/// - Near 50 (boundary): bars transition
+/// - Near 100 (max Transparency): bars are tall/open
 struct WaveformTrackShape: Shape {
     var sliderValue: Double
 
@@ -38,12 +38,10 @@ struct WaveformTrackShape: Shape {
 
             // ANC side (left): compressed. Transparency side (right): open.
             let sideFactor: CGFloat
-            if normalizedPosition < 0.4 {
-                sideFactor = sliderNormalized < 0.4 ? 0.2 : 0.5
-            } else if normalizedPosition > 0.6 {
-                sideFactor = sliderNormalized > 0.6 ? 1.0 : 0.4
+            if normalizedPosition < 0.5 {
+                sideFactor = sliderNormalized < 0.5 ? 0.2 : 0.5
             } else {
-                sideFactor = 0.3
+                sideFactor = sliderNormalized > 0.5 ? 1.0 : 0.4
             }
 
             let height = max(baseHeight, maxHeight * wave * sideFactor * (0.3 + proximity * 0.7))

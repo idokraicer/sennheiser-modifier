@@ -1,7 +1,7 @@
 import SwiftUI
 import AppKit
 
-/// A custom slider with three zones (ANC / Off / Transparency),
+/// A custom slider with two zones (ANC / Transparency),
 /// waveform visualization on the track, and a color-shifting thumb.
 struct UnifiedANCSlider: View {
     @Binding var value: Double
@@ -10,7 +10,7 @@ struct UnifiedANCSlider: View {
     var onCommit: ((Double) -> Void)?
 
     @State private var thumbScale: CGFloat = 1.0
-    @State private var currentZone: Int = 1 // 0=ANC, 1=Off, 2=Transparency
+    @State private var currentZone: Int = 0 // 0=ANC, 1=Transparency
     @State private var isHovered: Bool = false
     @State private var scrollMonitor: Any?
 
@@ -79,21 +79,15 @@ struct UnifiedANCSlider: View {
                 ZStack {
                     Text("ANC")
                         .font(.caption2)
-                        .fontWeight(value <= 39 ? .semibold : .regular)
-                        .foregroundStyle(value <= 39 ? accentColor : .secondary)
-                        .position(x: width * 0.195, y: 6)
-
-                    Text("Off")
-                        .font(.caption2)
-                        .fontWeight(value > 39 && value < 61 ? .semibold : .regular)
-                        .foregroundStyle(value > 39 && value < 61 ? .primary : .secondary)
-                        .position(x: width * 0.5, y: 6)
+                        .fontWeight(value <= 50 ? .semibold : .regular)
+                        .foregroundStyle(value <= 50 ? accentColor : .secondary)
+                        .position(x: width * 0.25, y: 6)
 
                     Text("Transparency")
                         .font(.caption2)
-                        .fontWeight(value >= 61 ? .semibold : .regular)
-                        .foregroundStyle(value >= 61 ? accentColor : .secondary)
-                        .position(x: width * 0.805, y: 6)
+                        .fontWeight(value > 50 ? .semibold : .regular)
+                        .foregroundStyle(value > 50 ? accentColor : .secondary)
+                        .position(x: width * 0.75, y: 6)
                 }
             }
             .frame(height: 12)
@@ -137,18 +131,17 @@ struct UnifiedANCSlider: View {
         return (value / 100.0) * usable
     }
 
-    /// Snap to center (50) when within the Off dead zone.
+    /// Snap to center (50) when near the ANC/Transparency boundary.
     private func snapToCenter(_ rawValue: Double) -> Double {
-        if rawValue > 44 && rawValue < 56 {
+        if rawValue > 48 && rawValue < 52 {
             return 50
         }
         return rawValue
     }
 
-    /// Zone index for detent detection: 0=ANC, 1=Off, 2=Transparency
+    /// Zone index for detent detection: 0=ANC, 1=Transparency
     private func zoneIndex(for value: Double) -> Int {
-        if value <= 39 { return 0 }
-        if value >= 61 { return 2 }
+        if value <= 50 { return 0 }
         return 1
     }
 
