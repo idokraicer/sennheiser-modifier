@@ -1,4 +1,38 @@
 import SwiftUI
+import AppKit
+
+/// Captures trackpad scroll wheel events and reports horizontal delta.
+private struct ScrollWheelView: NSViewRepresentable {
+    var onScroll: (CGFloat) -> Void
+    var onScrollEnd: () -> Void
+
+    func makeNSView(context: Context) -> ScrollWheelNSView {
+        let view = ScrollWheelNSView()
+        view.onScroll = onScroll
+        view.onScrollEnd = onScrollEnd
+        return view
+    }
+
+    func updateNSView(_ nsView: ScrollWheelNSView, context: Context) {
+        nsView.onScroll = onScroll
+        nsView.onScrollEnd = onScrollEnd
+    }
+}
+
+private class ScrollWheelNSView: NSView {
+    var onScroll: ((CGFloat) -> Void)?
+    var onScrollEnd: (() -> Void)?
+
+    override func scrollWheel(with event: NSEvent) {
+        if event.phase == .ended || event.momentumPhase == .ended {
+            onScrollEnd?()
+        } else if event.phase == .changed || event.momentumPhase == .changed {
+            // Use scrollingDeltaX for horizontal scroll; negate so swipe-right = increase
+            let delta = event.scrollingDeltaX
+            onScroll?(delta)
+        }
+    }
+}
 
 /// A custom slider with three zones (ANC / Off / Transparency),
 /// waveform visualization on the track, and a color-shifting thumb.
@@ -42,6 +76,7 @@ struct UnifiedANCSlider: View {
                         .offset(x: thumbOffset(in: geometry.size.width, thumbSize: thumbSize))
                 }
                 .frame(height: trackHeight)
+                .contentShape(Rectangle())
                 .gesture(
                     DragGesture(minimumDistance: 0)
                         .onChanged { drag in
@@ -64,11 +99,45 @@ struct UnifiedANCSlider: View {
 
                             onDragging?(snapped)
                         }
-                        .onEnded { _ in
+                        .onEnded { drag in
+                            guard !isDisabled else { return }
+                            // Compute position from drag location directly,
+                            // in case .onChanged didn't fire (macOS click without drag)
+                            let fraction = max(0, min(1, drag.location.x / geometry.size.width))
+                            let snapped = snapToCenter(fraction * 100)
+                            value = snapped
+                            onDragging?(snapped)
+                            onCommit?(snapped)
+                        }
+                )
+                .overlay {
+                    // Trackpad two-finger horizontal scroll
+                    ScrollWheelView(
+                        onScroll: { delta in
+                            guard !isDisabled else { return }
+                            let step = delta * 0.5 // Scale: ~2 full swipes to traverse 0-100
+                            let newValue = snapToCenter(max(0, min(100, value + Double(step))))
+                            value = newValue
+
+                            let newZone = zoneIndex(for: newValue)
+                            if newZone != currentZone {
+                                currentZone = newZone
+                                withAnimation(.spring(response: 0.15, dampingFraction: 0.5)) {
+                                    thumbScale = 1.15
+                                }
+                                withAnimation(.spring(response: 0.15, dampingFraction: 0.5).delay(0.1)) {
+                                    thumbScale = 1.0
+                                }
+                            }
+
+                            onDragging?(newValue)
+                        },
+                        onScrollEnd: {
                             guard !isDisabled else { return }
                             onCommit?(value)
                         }
-                )
+                    )
+                }
                 .opacity(isDisabled ? 0.4 : 1.0)
                 .allowsHitTesting(!isDisabled)
             }
