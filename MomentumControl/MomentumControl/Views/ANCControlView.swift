@@ -4,6 +4,7 @@ struct ANCControlView: View {
     @Bindable var viewModel: HeadphoneViewModel
 
     @State private var sliderValue: Double = 50
+    @State private var isDragging: Bool = false
 
     private var accentColor: Color {
         if viewModel.state.adaptiveModeEnabled {
@@ -53,10 +54,12 @@ struct ANCControlView: View {
                 value: $sliderValue,
                 isDisabled: viewModel.state.adaptiveModeEnabled,
                 onDragging: { newValue in
+                    isDragging = true
                     viewModel.handleSliderDragging(newValue)
                 },
                 onCommit: { finalValue in
                     viewModel.commitSliderValue(finalValue)
+                    isDragging = false
                 }
             )
 
@@ -92,9 +95,11 @@ struct ANCControlView: View {
             sliderValue = viewModel.state.unifiedSliderValue
         }
         .onChange(of: viewModel.state.ancEnabled) { _, _ in
+            guard !isDragging else { return }
             sliderValue = viewModel.state.unifiedSliderValue
         }
         .onChange(of: viewModel.state.transparentHearingEnabled) { _, _ in
+            guard !isDragging else { return }
             sliderValue = viewModel.state.unifiedSliderValue
         }
     }

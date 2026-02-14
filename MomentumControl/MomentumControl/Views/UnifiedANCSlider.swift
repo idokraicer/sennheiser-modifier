@@ -1,39 +1,6 @@
 import SwiftUI
 import AppKit
 
-/// Captures trackpad scroll wheel events and reports horizontal delta.
-private struct ScrollWheelView: NSViewRepresentable {
-    var onScroll: (CGFloat) -> Void
-    var onScrollEnd: () -> Void
-
-    func makeNSView(context: Context) -> ScrollWheelNSView {
-        let view = ScrollWheelNSView()
-        view.onScroll = onScroll
-        view.onScrollEnd = onScrollEnd
-        return view
-    }
-
-    func updateNSView(_ nsView: ScrollWheelNSView, context: Context) {
-        nsView.onScroll = onScroll
-        nsView.onScrollEnd = onScrollEnd
-    }
-}
-
-private class ScrollWheelNSView: NSView {
-    var onScroll: ((CGFloat) -> Void)?
-    var onScrollEnd: (() -> Void)?
-
-    override func scrollWheel(with event: NSEvent) {
-        if event.phase == .ended || event.momentumPhase == .ended {
-            onScrollEnd?()
-        } else if event.phase == .changed || event.momentumPhase == .changed {
-            // Use scrollingDeltaX for horizontal scroll; negate so swipe-right = increase
-            let delta = event.scrollingDeltaX
-            onScroll?(delta)
-        }
-    }
-}
-
 /// A custom slider with three zones (ANC / Off / Transparency),
 /// waveform visualization on the track, and a color-shifting thumb.
 struct UnifiedANCSlider: View {
@@ -44,6 +11,8 @@ struct UnifiedANCSlider: View {
 
     @State private var thumbScale: CGFloat = 1.0
     @State private var currentZone: Int = 1 // 0=ANC, 1=Off, 2=Transparency
+    @State private var isHovered: Bool = false
+    @State private var scrollMonitor: Any?
 
     private var accentColor: Color {
         DeviceState.accentColor(forSliderValue: value)
@@ -84,25 +53,11 @@ struct UnifiedANCSlider: View {
                             let fraction = max(0, min(1, drag.location.x / geometry.size.width))
                             let snapped = snapToCenter(fraction * 100)
                             value = snapped
-
-                            // Zone-change detent feedback
-                            let newZone = zoneIndex(for: snapped)
-                            if newZone != currentZone {
-                                currentZone = newZone
-                                withAnimation(.spring(response: 0.15, dampingFraction: 0.5)) {
-                                    thumbScale = 1.15
-                                }
-                                withAnimation(.spring(response: 0.15, dampingFraction: 0.5).delay(0.1)) {
-                                    thumbScale = 1.0
-                                }
-                            }
-
+                            applyDetent(for: snapped)
                             onDragging?(snapped)
                         }
                         .onEnded { drag in
                             guard !isDisabled else { return }
-                            // Compute position from drag location directly,
-                            // in case .onChanged didn't fire (macOS click without drag)
                             let fraction = max(0, min(1, drag.location.x / geometry.size.width))
                             let snapped = snapToCenter(fraction * 100)
                             value = snapped
@@ -110,33 +65,8 @@ struct UnifiedANCSlider: View {
                             onCommit?(snapped)
                         }
                 )
-                .overlay {
-                    // Trackpad two-finger horizontal scroll
-                    ScrollWheelView(
-                        onScroll: { delta in
-                            guard !isDisabled else { return }
-                            let step = delta * 0.5 // Scale: ~2 full swipes to traverse 0-100
-                            let newValue = snapToCenter(max(0, min(100, value + Double(step))))
-                            value = newValue
-
-                            let newZone = zoneIndex(for: newValue)
-                            if newZone != currentZone {
-                                currentZone = newZone
-                                withAnimation(.spring(response: 0.15, dampingFraction: 0.5)) {
-                                    thumbScale = 1.15
-                                }
-                                withAnimation(.spring(response: 0.15, dampingFraction: 0.5).delay(0.1)) {
-                                    thumbScale = 1.0
-                                }
-                            }
-
-                            onDragging?(newValue)
-                        },
-                        onScrollEnd: {
-                            guard !isDisabled else { return }
-                            onCommit?(value)
-                        }
-                    )
+                .onHover { hovering in
+                    isHovered = hovering
                 }
                 .opacity(isDisabled ? 0.4 : 1.0)
                 .allowsHitTesting(!isDisabled)
@@ -168,8 +98,39 @@ struct UnifiedANCSlider: View {
             }
             .frame(height: 12)
         }
-        .animation(.easeInOut(duration: 0.3), value: value)
+        .onAppear { installScrollMonitor() }
+        .onDisappear { removeScrollMonitor() }
     }
+
+    // MARK: - Scroll Wheel (trackpad two-finger horizontal)
+
+    private func installScrollMonitor() {
+        scrollMonitor = NSEvent.addLocalMonitorForEvents(matching: .scrollWheel) { [self] event in
+            guard isHovered, !isDisabled else { return event }
+
+            if event.phase == .changed || event.momentumPhase == .changed {
+                let step = event.scrollingDeltaX * 0.5
+                let newValue = snapToCenter(max(0, min(100, value + Double(step))))
+                value = newValue
+                applyDetent(for: newValue)
+                onDragging?(newValue)
+                return nil // consume the event
+            } else if event.phase == .ended || event.momentumPhase == .ended {
+                onCommit?(value)
+                return nil
+            }
+            return event
+        }
+    }
+
+    private func removeScrollMonitor() {
+        if let monitor = scrollMonitor {
+            NSEvent.removeMonitor(monitor)
+            scrollMonitor = nil
+        }
+    }
+
+    // MARK: - Helpers
 
     private func thumbOffset(in width: CGFloat, thumbSize: CGFloat) -> CGFloat {
         let usable = width - thumbSize
@@ -189,5 +150,19 @@ struct UnifiedANCSlider: View {
         if value <= 39 { return 0 }
         if value >= 61 { return 2 }
         return 1
+    }
+
+    /// Thumb scale pulse when crossing a zone boundary.
+    private func applyDetent(for newValue: Double) {
+        let newZone = zoneIndex(for: newValue)
+        if newZone != currentZone {
+            currentZone = newZone
+            withAnimation(.spring(response: 0.15, dampingFraction: 0.5)) {
+                thumbScale = 1.15
+            }
+            withAnimation(.spring(response: 0.15, dampingFraction: 0.5).delay(0.1)) {
+                thumbScale = 1.0
+            }
+        }
     }
 }
