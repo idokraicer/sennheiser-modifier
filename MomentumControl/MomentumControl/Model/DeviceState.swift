@@ -42,6 +42,9 @@ final class DeviceState {
     // MARK: - Paired Devices
     var pairedDeviceCount: Int = 0
     var pairedDevices: [PairedDevice] = []
+    /// Device indices currently transitioning (optimistic UI only, never touches real connectionState)
+    var connectingDevices: Set<UInt8> = []
+    var disconnectingDevices: Set<UInt8> = []
 
     // MARK: - Computed
 
@@ -130,5 +133,7 @@ final class DeviceState {
         comfortCallEnabled = false
         pairedDeviceCount = 0
         pairedDevices = []
+        connectingDevices = []
+        disconnectingDevices = []
     }
 }

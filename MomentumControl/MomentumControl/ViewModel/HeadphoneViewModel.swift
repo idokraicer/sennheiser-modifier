@@ -1,4 +1,5 @@
 import Foundation
+import IOBluetooth
 import os
 
 /// Bridges GAIAConnection ↔ DeviceState ↔ UI.
@@ -232,6 +233,13 @@ final class HeadphoneViewModel {
                         deviceType: old.deviceType,
                         name: old.name
                     )
+                }
+                // Clear transitional flags once real state confirms the outcome
+                if connStatus == 1 {
+                    state.connectingDevices.remove(index)
+                }
+                if connStatus == 0 {
+                    state.disconnectingDevices.remove(index)
                 }
             }
 
@@ -582,12 +590,53 @@ final class HeadphoneViewModel {
         connection.sendInvocation(for: .pairedDeviceConnectionStatus, parameters: [.uint8(index)])
     }
 
+    /// Returns this Mac's Bluetooth name for identifying "self" in the paired device list.
+    private var localBluetoothName: String? {
+        IOBluetoothHostController.default()?.nameAsString()
+    }
+
     func connectPairedDevice(index: UInt8) {
+        let connectedDevices = state.pairedDevices.filter { $0.isConnected }
+
+        // If 2 devices already connected, auto-disconnect the non-Mac one first
+        if connectedDevices.count >= 2 {
+            let macName = localBluetoothName
+            // Find a connected device that is NOT this Mac and NOT the target
+            if let deviceToDisconnect = connectedDevices.first(where: {
+                $0.index != index && !$0.name.localizedCaseInsensitiveContains(macName ?? "")
+            }) {
+                state.disconnectingDevices.insert(deviceToDisconnect.index)
+                state.connectingDevices.insert(index)
+                connection.sendInvocation(for: .pairedDeviceDisconnect, parameters: [.uint8(deviceToDisconnect.index)])
+                // Wait for disconnect to process, then connect target
+                Task { @MainActor in
+                    try? await Task.sleep(for: .seconds(1.5))
+                    connection.sendInvocation(for: .pairedDeviceConnect, parameters: [.uint8(index)])
+                }
+                scheduleTransitionTimeout(for: index)
+                scheduleTransitionTimeout(for: deviceToDisconnect.index)
+                return
+            }
+        }
+
+        state.connectingDevices.insert(index)
         connection.sendInvocation(for: .pairedDeviceConnect, parameters: [.uint8(index)])
+        scheduleTransitionTimeout(for: index)
     }
 
     func disconnectPairedDevice(index: UInt8) {
+        state.disconnectingDevices.insert(index)
         connection.sendInvocation(for: .pairedDeviceDisconnect, parameters: [.uint8(index)])
+        scheduleTransitionTimeout(for: index)
+    }
+
+    /// Safety net: clear any transitional flag after 10s in case the real state never arrives.
+    private func scheduleTransitionTimeout(for index: UInt8) {
+        Task { @MainActor in
+            try? await Task.sleep(for: .seconds(10))
+            state.connectingDevices.remove(index)
+            state.disconnectingDevices.remove(index)
+        }
     }
 
     func refreshAllConnectionStatuses() {
