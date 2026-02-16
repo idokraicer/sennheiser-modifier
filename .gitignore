@@ -6,6 +6,9 @@ sennheiser-desktop-client/
 *.swp
 *~
 
+# Build output
+dist/
+
 # Xcode
 build/
 DerivedData/
