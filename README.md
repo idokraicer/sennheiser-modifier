@@ -21,47 +21,42 @@ Communicates directly with the headphones using the GAIA v3 protocol over RFCOMM
 
 - macOS 14.0 (Sonoma) or later
 - Sennheiser Momentum 4 headphones paired via Bluetooth
-- [XcodeGen](https://github.com/yonaskolb/XcodeGen) (for building from source)
-- Xcode 16.0 or later
 
 ## Installation
 
-### Quick Install
+### Quick Install (no Xcode needed)
+
+Run this in Terminal:
 
 ```bash
-git clone https://github.com/idokraicer/sennheiser-modifier.git
-cd sennheiser-modifier
-./install.sh
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/idokraicer/sennheiser-modifier/main/install.sh)"
 ```
 
-This will check prerequisites, build a Release binary, and install to `/Applications`. It will install [XcodeGen](https://github.com/yonaskolb/XcodeGen) via Homebrew if not already present.
+This downloads the latest pre-built release, installs to `/Applications`, and launches the app.
 
-### Manual Build
+### Build from Source
 
-1. **Install XcodeGen** (if you don't have it):
+Requires Xcode 16.0+ and [XcodeGen](https://github.com/yonaskolb/XcodeGen).
 
-   ```bash
-   brew install xcodegen
-   ```
-
-2. **Clone and generate:**
+1. **Clone and build:**
 
    ```bash
    git clone https://github.com/idokraicer/sennheiser-modifier.git
-   cd sennheiser-modifier/MomentumControl
+   cd sennheiser-modifier
+   ./build.sh
+   ```
+
+2. **Install the built app:**
+
+   ```bash
+   cp -R build/Build/Products/Release/MomentumControl.app /Applications/
+   ```
+
+   Or open in Xcode:
+   ```bash
+   cd MomentumControl
    xcodegen generate
-   ```
-
-3. **Build and run:**
-
-   Open in Xcode:
-   ```bash
    open MomentumControl.xcodeproj
-   ```
-
-   Or build from the command line:
-   ```bash
-   xcodebuild -project MomentumControl.xcodeproj -scheme MomentumControl -configuration Release build
    ```
 
 ### Bluetooth Permissions
