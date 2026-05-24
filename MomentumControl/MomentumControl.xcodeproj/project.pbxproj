@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		03A19BA81EEC110A55B7EE05 /* ANCControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1840CDBA124F795C0447D47 /* ANCControlView.swift */; };
 		097EA882E9C387AB4818A0E4 /* BluetoothTransport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42819BE38757F939038FD991 /* BluetoothTransport.swift */; };
+		12F999FAD718FA89FCA25289 /* ANCTransparencyCommandPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E9474B13EA9D8AEE1F0499 /* ANCTransparencyCommandPolicyTests.swift */; };
 		147CF10E61F8A0C3127F7595 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5ABFC7611BFE867B449E2AF /* Constants.swift */; };
 		1574EE040ED44EF96C76F42A /* WaveformTrackShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = D689FDB434B681245C99FC69 /* WaveformTrackShape.swift */; };
 		1AEC6D7083CD6512E349E826 /* BluetoothMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD834BB0365C697F80F9939B /* BluetoothMonitor.swift */; };
@@ -32,6 +33,7 @@
 		A814299DA0442838C98BC692 /* DeviceState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0080AD481E438456E786271 /* DeviceState.swift */; };
 		B7C541F177A23A7EFB56E09E /* UnifiedANCSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C8768E23517744381DD222 /* UnifiedANCSlider.swift */; };
 		B9A80A7D74262AF76F1C3F23 /* GAIAPropertyDefinition.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC2B239433DD5ED9BBAC7DC8 /* GAIAPropertyDefinition.swift */; };
+		C02703ED92EF27131B1B7457 /* UnifiedANCSliderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0025730CA8D39F8B6D5AC12F /* UnifiedANCSliderTests.swift */; };
 		C7D7E73B7840126265B1AEE1 /* ANCMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49379A50FA5F7BE0CCB21703 /* ANCMode.swift */; };
 		CA47695E0995D3FCDAEA274B /* ConnectedDevicesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5D6B34D0DC7EF5BC43140D5 /* ConnectedDevicesView.swift */; };
 		CC0C3B6860522BD814469C98 /* RFCOMMChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C714979E04D5D85CE2BCD2F8 /* RFCOMMChannel.swift */; };
@@ -57,6 +59,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0025730CA8D39F8B6D5AC12F /* UnifiedANCSliderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnifiedANCSliderTests.swift; sourceTree = "<group>"; };
 		014AC47D80A54BC8C314728C /* BatteryRingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryRingView.swift; sourceTree = "<group>"; };
 		0EB0E08DEFA1E4A17E57E0E9 /* DataExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensions.swift; sourceTree = "<group>"; };
 		142C16BD5B46B851E85C0A98 /* MenuBarIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarIcon.swift; sourceTree = "<group>"; };
@@ -78,6 +81,7 @@
 		9852C13107A28D523C365F25 /* IOBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = IOBluetooth.framework; sourceTree = "<group>"; };
 		9F8CFC539E0F77E3C6FF6D07 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		9FC9AE08B3AE9BB61BE6B7A3 /* QuickTogglesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickTogglesView.swift; sourceTree = "<group>"; };
+		A1E9474B13EA9D8AEE1F0499 /* ANCTransparencyCommandPolicyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ANCTransparencyCommandPolicyTests.swift; sourceTree = "<group>"; };
 		A5ABFC7611BFE867B449E2AF /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		AC2B239433DD5ED9BBAC7DC8 /* GAIAPropertyDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GAIAPropertyDefinition.swift; sourceTree = "<group>"; };
 		AF13F1748445587D3A9C1A72 /* GAIAPacketTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GAIAPacketTests.swift; sourceTree = "<group>"; };
@@ -182,9 +186,11 @@
 		A9AD50836AAD98AC4892D243 /* MomentumControlTests */ = {
 			isa = PBXGroup;
 			children = (
+				A1E9474B13EA9D8AEE1F0499 /* ANCTransparencyCommandPolicyTests.swift */,
 				AF13F1748445587D3A9C1A72 /* GAIAPacketTests.swift */,
 				496DBEEEC2D0CD227F2BAEC1 /* GAIAPropertyRegistryTests.swift */,
 				4217EA5F2F18F34B72BF17DB /* GAIAValueParserTests.swift */,
+				0025730CA8D39F8B6D5AC12F /* UnifiedANCSliderTests.swift */,
 			);
 			path = MomentumControlTests;
 			sourceTree = "<group>";
@@ -292,9 +298,10 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+				};
 			};
 			buildConfigurationList = 9DDA8DC0AB2B39D4FB8F3AC5 /* Build configuration list for PBXProject "MomentumControl" */;
-			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -304,6 +311,7 @@
 			mainGroup = 1E7AE152C6AA8EDB768AA4F0;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
+			productRefGroup = 28F754F3C3CE633583A867BE /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -329,9 +337,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				12F999FAD718FA89FCA25289 /* ANCTransparencyCommandPolicyTests.swift in Sources */,
 				7324BE037747EB2F9EB8234C /* GAIAPacketTests.swift in Sources */,
 				5557691C8B407464E0243B3E /* GAIAPropertyRegistryTests.swift in Sources */,
 				F8259E837C8C94F49696F7B5 /* GAIAValueParserTests.swift in Sources */,
+				C02703ED92EF27131B1B7457 /* UnifiedANCSliderTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -25,6 +25,11 @@ final class HeadphoneViewModel {
     /// Debounce task for unknown-command re-fetch (prevents cascading GETs).
     private var unknownRefetchTask: Task<Void, Never>?
 
+    /// True between enabling transparency mode and sending the intended level.
+    /// This avoids a race where the headset briefly jumps to its default
+    /// transparency level before our target value lands.
+    private var isAwaitingTransparencyActivation = false
+
     init(transport: BluetoothTransport? = nil) {
         self.state = DeviceState()
         self.scanner = BLEScanner()
@@ -51,6 +56,8 @@ final class HeadphoneViewModel {
                 guard let self else { return }
                 self.logger.info("Device disconnected unexpectedly")
                 self.lastSentZone = nil
+                self.transparencyDebounceTask?.cancel()
+                self.isAwaitingTransparencyActivation = false
                 self.state.reset()
             }
         }
@@ -84,6 +91,8 @@ final class HeadphoneViewModel {
                 guard let self else { return }
                 self.logger.info("Monitor: device disconnected, resetting state")
                 self.lastSentZone = nil
+                self.transparencyDebounceTask?.cancel()
+                self.isAwaitingTransparencyActivation = false
                 if self.connection.isConnected {
                     self.connection.disconnect()
                 } else {
@@ -425,6 +434,7 @@ final class HeadphoneViewModel {
     func handleSliderDragging(_ value: Double) {
         let zone = zoneForSliderValue(value)
         let transparencyLevel = Int(value) // Direct 1:1 mapping: slider 0-100 = device 0-100
+        let didChangeZone = zone != lastSentZone
 
         // Keep cooldown active while user is dragging (prevents device
         // notifications from overwriting slider-set state mid-drag)
@@ -447,35 +457,40 @@ final class HeadphoneViewModel {
         }
 
         // Only send mode-switch commands when zone actually changes
-        if zone != lastSentZone {
+        if didChangeZone {
             lastSentZone = zone
             switch zone {
             case .anc:
+                isAwaitingTransparencyActivation = false
                 connection.sendSet(for: .ancStatus, values: [.uint8(0x01)])
                 connection.sendSet(for: .transparentHearingStatus, values: [.uint8(0x00)])
             case .transparency:
                 // Only enable transparency — do NOT send ANC_Status=0.
                 // The device treats ANC_Status SET 0 as "turn off all noise control",
                 // which forces off mode. The device auto-disables ANC when TH is enabled.
+                isAwaitingTransparencyActivation = true
                 connection.sendSet(for: .transparentHearingStatus, values: [.uint8(0x01)])
             case .off:
                 break
             }
         }
 
-        // Debounce ANC transparency level
-        transparencyDebounceTask?.cancel()
-        transparencyDebounceTask = Task { @MainActor in
-            try? await Task.sleep(for: .seconds(0.3))
-            guard !Task.isCancelled else { return }
-            connection.sendSet(for: .ancTransparency, values: [.uint8(UInt8(clamping: transparencyLevel))])
-        }
+        scheduleTransparencyLevelSend(
+            transparencyLevel,
+            mode: ANCTransparencyCommandPolicy.levelSendMode(
+                zone: zone,
+                didChangeZone: didChangeZone,
+                isCommit: false,
+                isAwaitingTransparencyActivation: isAwaitingTransparencyActivation
+            )
+        )
     }
 
     /// Called on drag end. Sends definitive transparency level; only sends mode commands if zone wasn't already set during drag.
     func commitSliderValue(_ value: Double) {
         let zone = zoneForSliderValue(value)
         let transparencyLevel = Int(value) // Direct 1:1 mapping
+        let didChangeZone = zone != lastSentZone
 
         // Ensure cooldown lasts 3 seconds from drag release (not from last zone change)
         lastModeChangeTime = Date()
@@ -499,25 +514,33 @@ final class HeadphoneViewModel {
         // Only send mode-switch if zone changed since last drag frame
         // (handleSliderDragging already sent mode commands during drag;
         // re-sending here can cause the headphones to reset ANC_Transparency)
-        if zone != lastSentZone {
+        if didChangeZone {
             lastSentZone = zone
             lastModeChangeTime = Date()
             switch zone {
             case .anc:
+                isAwaitingTransparencyActivation = false
                 connection.sendSet(for: .ancStatus, values: [.uint8(0x01)])
                 connection.sendSet(for: .transparentHearingStatus, values: [.uint8(0x00)])
             case .transparency:
+                isAwaitingTransparencyActivation = true
                 connection.sendSet(for: .transparentHearingStatus, values: [.uint8(0x01)])
             case .off:
                 break
             }
         }
 
-        // Always send the definitive transparency level
-        transparencyDebounceTask?.cancel()
-        connection.sendSet(for: .ancTransparency, values: [.uint8(UInt8(clamping: transparencyLevel))])
+        scheduleTransparencyLevelSend(
+            transparencyLevel,
+            mode: ANCTransparencyCommandPolicy.levelSendMode(
+                zone: zone,
+                didChangeZone: didChangeZone,
+                isCommit: true,
+                isAwaitingTransparencyActivation: isAwaitingTransparencyActivation
+            )
+        )
     }
-
+ 
     func setAdaptiveANC(enabled: Bool) {
         state.adaptiveModeEnabled = enabled
         lastModeChangeTime = Date()
@@ -526,6 +549,7 @@ final class HeadphoneViewModel {
             state.ancEnabled = true
             state.transparentHearingEnabled = false
             state.ancMode = .anc
+            isAwaitingTransparencyActivation = false
             connection.sendSet(for: .ancStatus, values: [.uint8(0x01)])
             connection.sendSet(for: .transparentHearingStatus, values: [.uint8(0x00)])
         }
@@ -539,6 +563,8 @@ final class HeadphoneViewModel {
             state.adaptiveModeEnabled = false
             state.ancMode = .off
             lastSentZone = nil
+            transparencyDebounceTask?.cancel()
+            isAwaitingTransparencyActivation = false
             lastModeChangeTime = Date()
             connection.sendSet(for: .ancStatus, values: [.uint8(0x00)])
             connection.sendSet(for: .transparentHearingStatus, values: [.uint8(0x00)])
@@ -645,7 +671,61 @@ final class HeadphoneViewModel {
         }
     }
 
+    private func scheduleTransparencyLevelSend(_ transparencyLevel: Int, mode: ANCTransparencyLevelSendMode) {
+        transparencyDebounceTask?.cancel()
+
+        let sendLevel = { [self] in
+            connection.sendSet(for: .ancTransparency, values: [.uint8(UInt8(clamping: transparencyLevel))])
+            isAwaitingTransparencyActivation = false
+        }
+
+        switch mode {
+        case .immediate:
+            sendLevel()
+        case .delayedForModeActivation:
+            transparencyDebounceTask = Task { @MainActor in
+                try? await Task.sleep(for: .milliseconds(150))
+                guard !Task.isCancelled else { return }
+                sendLevel()
+            }
+        case .debounced:
+            transparencyDebounceTask = Task { @MainActor in
+                try? await Task.sleep(for: .seconds(0.3))
+                guard !Task.isCancelled else { return }
+                sendLevel()
+            }
+        }
+    }
+
     // MARK: - Scanner Access
 
     var bleScanner: BLEScanner { scanner }
+}
+
+enum ANCTransparencyLevelSendMode {
+    case immediate
+    case delayedForModeActivation
+    case debounced
+}
+
+enum ANCTransparencyCommandPolicy {
+    static func levelSendMode(
+        zone: ANCMode,
+        didChangeZone: Bool,
+        isCommit: Bool,
+        isAwaitingTransparencyActivation: Bool
+    ) -> ANCTransparencyLevelSendMode {
+        if isCommit {
+            if zone == .transparency && (didChangeZone || isAwaitingTransparencyActivation) {
+                return .delayedForModeActivation
+            }
+            return .immediate
+        }
+
+        if zone == .transparency && didChangeZone {
+            return .delayedForModeActivation
+        }
+
+        return .debounced
+    }
 }
