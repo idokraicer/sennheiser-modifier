@@ -30,6 +30,12 @@ final class HeadphoneViewModel {
     /// transparency level before our target value lands.
     private var isAwaitingTransparencyActivation = false
 
+    /// Delay after enabling transparency before sending the target level.
+    private static let transparencyActivationDelay: Duration = .milliseconds(150)
+
+    /// Debounce drag updates to avoid flooding the headset with level changes.
+    private static let sliderDebounceDelay: Duration = .seconds(0.3)
+
     init(transport: BluetoothTransport? = nil) {
         self.state = DeviceState()
         self.scanner = BLEScanner()
@@ -684,13 +690,13 @@ final class HeadphoneViewModel {
             sendLevel()
         case .delayedForModeActivation:
             transparencyDebounceTask = Task { @MainActor in
-                try? await Task.sleep(for: .milliseconds(150))
+                try? await Task.sleep(for: Self.transparencyActivationDelay)
                 guard !Task.isCancelled else { return }
                 sendLevel()
             }
         case .debounced:
             transparencyDebounceTask = Task { @MainActor in
-                try? await Task.sleep(for: .seconds(0.3))
+                try? await Task.sleep(for: Self.sliderDebounceDelay)
                 guard !Task.isCancelled else { return }
                 sendLevel()
             }
@@ -709,12 +715,16 @@ enum ANCTransparencyLevelSendMode {
 }
 
 enum ANCTransparencyCommandPolicy {
+    /// Determines when the slider should send its next transparency value.
+    /// The unified slider only produces `.anc` and `.transparency`.
     static func levelSendMode(
         zone: ANCMode,
         didChangeZone: Bool,
         isCommit: Bool,
         isAwaitingTransparencyActivation: Bool
     ) -> ANCTransparencyLevelSendMode {
+        assert(zone != .off, "Unified ANC slider should not route the .off zone through ANCTransparencyCommandPolicy")
+
         if isCommit {
             if zone == .transparency && (didChangeZone || isAwaitingTransparencyActivation) {
                 return .delayedForModeActivation

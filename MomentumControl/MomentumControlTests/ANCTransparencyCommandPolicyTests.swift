@@ -40,10 +40,46 @@ struct ANCTransparencyCommandPolicyTests {
         #expect(mode == .debounced)
     }
 
+    @Test("Uses debounced sends while dragging in ANC zone")
+    func debouncesDraggingInANCZone() {
+        let mode = ANCTransparencyCommandPolicy.levelSendMode(
+            zone: .anc,
+            didChangeZone: false,
+            isCommit: false,
+            isAwaitingTransparencyActivation: false
+        )
+
+        #expect(mode == .debounced)
+    }
+
+    @Test("Uses debounced sends when returning to ANC during drag")
+    func debouncesDraggingWhenReturningToANCZone() {
+        let mode = ANCTransparencyCommandPolicy.levelSendMode(
+            zone: .anc,
+            didChangeZone: true,
+            isCommit: false,
+            isAwaitingTransparencyActivation: false
+        )
+
+        #expect(mode == .debounced)
+    }
+
     @Test("Uses immediate send for stable commit")
     func sendsImmediateLevelForStableCommit() {
         let mode = ANCTransparencyCommandPolicy.levelSendMode(
             zone: .transparency,
+            didChangeZone: false,
+            isCommit: true,
+            isAwaitingTransparencyActivation: false
+        )
+
+        #expect(mode == .immediate)
+    }
+
+    @Test("Uses immediate send for ANC commit")
+    func sendsImmediateLevelForANCCommit() {
+        let mode = ANCTransparencyCommandPolicy.levelSendMode(
+            zone: .anc,
             didChangeZone: false,
             isCommit: true,
             isAwaitingTransparencyActivation: false

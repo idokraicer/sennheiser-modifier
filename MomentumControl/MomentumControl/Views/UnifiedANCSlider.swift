@@ -101,6 +101,14 @@ struct UnifiedANCSlider: View {
 
     private func installScrollMonitor() {
         scrollMonitor = NSEvent.addLocalMonitorForEvents(matching: .scrollWheel) { [self] event in
+            let didEndScroll = event.phase == .ended || event.momentumPhase == .ended || event.phase == .cancelled
+            if didEndScroll {
+                guard isHandlingHorizontalScroll else { return event }
+                isHandlingHorizontalScroll = false
+                onCommit?(value)
+                return nil
+            }
+
             guard isHovered, !isDisabled else { return event }
 
             if event.phase == .changed || event.momentumPhase == .changed {
@@ -120,11 +128,6 @@ struct UnifiedANCSlider: View {
                 applyDetent(for: newValue)
                 onDragging?(newValue)
                 return nil // consume the event
-            } else if event.phase == .ended || event.momentumPhase == .ended || event.phase == .cancelled {
-                guard isHandlingHorizontalScroll else { return event }
-                isHandlingHorizontalScroll = false
-                onCommit?(value)
-                return nil
             }
             return event
         }
