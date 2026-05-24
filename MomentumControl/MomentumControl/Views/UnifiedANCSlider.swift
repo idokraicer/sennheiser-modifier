@@ -13,6 +13,7 @@ struct UnifiedANCSlider: View {
     @State private var currentZone: Int = 0 // 0=ANC, 1=Transparency
     @State private var isHovered: Bool = false
     @State private var scrollMonitor: Any?
+    @State private var isHandlingHorizontalScroll: Bool = false
 
     private var accentColor: Color {
         DeviceState.accentColor(forSliderValue: value)
@@ -100,18 +101,33 @@ struct UnifiedANCSlider: View {
 
     private func installScrollMonitor() {
         scrollMonitor = NSEvent.addLocalMonitorForEvents(matching: .scrollWheel) { [self] event in
+            let didEndScroll = event.phase == .ended || event.momentumPhase == .ended || event.phase == .cancelled
+            if didEndScroll {
+                guard isHandlingHorizontalScroll else { return event }
+                isHandlingHorizontalScroll = false
+                onCommit?(value)
+                return nil
+            }
+
             guard isHovered, !isDisabled else { return event }
 
             if event.phase == .changed || event.momentumPhase == .changed {
+                if !isHandlingHorizontalScroll {
+                    guard ANCSliderScrollPolicy.shouldBeginHorizontalScroll(
+                        horizontalDelta: event.scrollingDeltaX,
+                        verticalDelta: event.scrollingDeltaY
+                    ) else {
+                        return event
+                    }
+                    isHandlingHorizontalScroll = true
+                }
+
                 let step = event.scrollingDeltaX * 0.5
                 let newValue = snapToCenter(max(0, min(100, value + Double(step))))
                 value = newValue
                 applyDetent(for: newValue)
                 onDragging?(newValue)
                 return nil // consume the event
-            } else if event.phase == .ended || event.momentumPhase == .ended {
-                onCommit?(value)
-                return nil
             }
             return event
         }
@@ -162,5 +178,18 @@ struct UnifiedANCSlider: View {
                 thumbScale = 1.0
             }
         }
+    }
+}
+
+enum ANCSliderScrollPolicy {
+    static let minimumHorizontalDelta: CGFloat = 1.0
+    static let horizontalDominanceRatio: CGFloat = 1.5
+
+    static func shouldBeginHorizontalScroll(horizontalDelta: CGFloat, verticalDelta: CGFloat) -> Bool {
+        let horizontalMagnitude = abs(horizontalDelta)
+        let verticalMagnitude = abs(verticalDelta)
+
+        guard horizontalMagnitude >= minimumHorizontalDelta else { return false }
+        return horizontalMagnitude > verticalMagnitude * horizontalDominanceRatio
     }
 }
