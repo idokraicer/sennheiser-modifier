@@ -49,3 +49,12 @@ targets:
         BUNDLE_LOADER: "$(TEST_HOST)"
     dependencies:
       - target: MomentumControl
+
+schemes:
+  MomentumControl:
+    build:
+      targets:
+        MomentumControl: all
+    test:
+      targets:
+        - MomentumControlTests
