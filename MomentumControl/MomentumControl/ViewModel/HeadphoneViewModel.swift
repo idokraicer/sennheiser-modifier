@@ -36,6 +36,23 @@ final class HeadphoneViewModel {
     /// Debounce drag updates to avoid flooding the headset with level changes.
     private static let sliderDebounceDelay: Duration = .seconds(0.3)
 
+    /// Repeating heartbeat that pings the device and detects zombie RFCOMM channels.
+    private var heartbeatTask: Task<Void, Never>?
+
+    /// Timestamp of the last GAIA response received. Used by the heartbeat
+    /// to decide whether a connection has gone silent (zombie channel).
+    private var lastReceivedTime: Date = .distantPast
+
+    /// True when the user clicked Disconnect (suppresses auto-reconnect).
+    private var isUserInitiatedDisconnect = false
+
+    /// Address of the most recently connected device, used for auto-reconnect.
+    /// Persists across `state.reset()` so we can recover from unexpected drops.
+    private var lastConnectedAddress: String?
+
+    /// Pending auto-reconnect task — cancelled when the user explicitly disconnects.
+    private var autoReconnectTask: Task<Void, Never>?
+
     init(transport: BluetoothTransport? = nil) {
         self.state = DeviceState()
         self.scanner = BLEScanner()
@@ -53,18 +70,31 @@ final class HeadphoneViewModel {
     private func setupResponseHandler() {
         connection.onPropertyReceived = { [weak self] property, values in
             Task { @MainActor in
-                self?.handlePropertyUpdate(property: property, values: values)
+                guard let self else { return }
+                self.lastReceivedTime = Date()
+                self.handlePropertyUpdate(property: property, values: values)
             }
         }
 
         connection.onDisconnected = { [weak self] in
             Task { @MainActor in
                 guard let self else { return }
-                self.logger.info("Device disconnected unexpectedly")
+                self.logger.info("Transport disconnected")
                 self.lastSentZone = nil
                 self.transparencyDebounceTask?.cancel()
                 self.isAwaitingTransparencyActivation = false
+                self.heartbeatTask?.cancel()
+                self.heartbeatTask = nil
+
+                let wasUserInitiated = self.isUserInitiatedDisconnect
+                let addressToReconnect = self.lastConnectedAddress
+                self.isUserInitiatedDisconnect = false
+
+
                 self.state.reset()
+
+                guard !wasUserInitiated, let address = addressToReconnect else { return }
+                self.scheduleAutoReconnect(to: address, after: 2.0)
             }
         }
 
@@ -99,6 +129,12 @@ final class HeadphoneViewModel {
                 self.lastSentZone = nil
                 self.transparencyDebounceTask?.cancel()
                 self.isAwaitingTransparencyActivation = false
+                // BT device fully gone — don't bother trying to auto-reconnect.
+                // The monitor's onDeviceConnected will handle re-attachment when
+                // the device comes back.
+                self.lastConnectedAddress = nil
+                self.autoReconnectTask?.cancel()
+                self.autoReconnectTask = nil
                 if self.connection.isConnected {
                     self.connection.disconnect()
                 } else {
@@ -323,13 +359,19 @@ final class HeadphoneViewModel {
     // MARK: - Connection
 
     func connect(to address: String) async {
+        autoReconnectTask?.cancel()
+        autoReconnectTask = nil
+
         state.connectionStatus = .connecting
         state.deviceAddress = address
 
         do {
             try await connection.connect(to: address)
             state.connectionStatus = .connected
+            lastConnectedAddress = address
+            lastReceivedTime = Date()
             requestAllProperties()
+            startHeartbeat()
         } catch {
             state.connectionStatus = .error(error.localizedDescription)
             logger.error("Connection failed: \(error.localizedDescription)")
@@ -349,9 +391,65 @@ final class HeadphoneViewModel {
     }
 
     func disconnect() {
+        isUserInitiatedDisconnect = true
+        lastConnectedAddress = nil
+        autoReconnectTask?.cancel()
+        autoReconnectTask = nil
+        heartbeatTask?.cancel()
+        heartbeatTask = nil
         connection.disconnect()
         lastSentZone = nil
         state.reset()
+    }
+
+    // MARK: - Auto-Reconnect & Heartbeat
+
+    /// Schedule an auto-reconnect attempt. Skips if the underlying Bluetooth
+    /// device is no longer connected (BluetoothMonitor will handle that case).
+    private func scheduleAutoReconnect(to address: String, after delay: TimeInterval) {
+        autoReconnectTask?.cancel()
+        autoReconnectTask = Task { @MainActor [weak self] in
+            try? await Task.sleep(for: .seconds(delay))
+            guard let self, !Task.isCancelled else { return }
+            guard !self.connection.isConnected else { return }
+
+            // Only auto-reconnect if the BT device is still connected at the
+            // system level — otherwise we'd just produce a flurry of failures.
+            guard let device = IOBluetoothDevice(addressString: address),
+                  device.isConnected() else {
+                self.logger.info("Auto-reconnect skipped: BT device \(address) not connected")
+                return
+            }
+
+            self.logger.info("Auto-reconnecting to \(address)")
+            await self.connect(to: address)
+        }
+    }
+
+    /// Periodically pings the device and forces a reconnect if responses stop arriving.
+    /// Catches zombie RFCOMM channels where writes succeed but the device is unreachable.
+    private func startHeartbeat() {
+        heartbeatTask?.cancel()
+        heartbeatTask = Task { @MainActor [weak self] in
+            while !Task.isCancelled {
+                try? await Task.sleep(for: .seconds(30))
+                guard let self, !Task.isCancelled else { return }
+                guard self.connection.isConnected else { return }
+
+                self.connection.sendGet(for: .batteryPercent)
+
+                try? await Task.sleep(for: .seconds(10))
+                guard !Task.isCancelled else { return }
+
+                let elapsed = Date().timeIntervalSince(self.lastReceivedTime)
+                if elapsed > 45 {
+                    self.logger.warning("Heartbeat: no response in \(Int(elapsed))s — forcing reconnect")
+                    // Drop the zombie channel; onDisconnected handler will auto-reconnect.
+                    self.connection.disconnect()
+                    return
+                }
+            }
+        }
     }
 
     // MARK: - Request All Properties

@@ -4,58 +4,77 @@ struct SettingsView: View {
     @Bindable var viewModel: HeadphoneViewModel
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            VStack(alignment: .leading, spacing: 8) {
-                Text("General")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+        VStack(alignment: .leading, spacing: 0) {
+            sectionHeader("General")
 
-                HStack(spacing: 8) {
-                    PillToggle(
-                        title: "On Head Detection",
-                        systemImage: "headphones",
-                        isOn: Binding(
-                            get: { viewModel.state.onHeadDetectionEnabled },
-                            set: { viewModel.setOnHeadDetection(enabled: $0) }
-                        ),
-                        accentColor: .blue
-                    )
+            settingRow(
+                icon: "headphones",
+                title: "On Head Detection",
+                isOn: Binding(
+                    get: { viewModel.state.onHeadDetectionEnabled },
+                    set: { viewModel.setOnHeadDetection(enabled: $0) }
+                )
+            )
 
-                    Spacer()
-                }
-            }
+            sectionHeader("Calls")
+                .padding(.top, 6)
 
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Call Settings")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+            settingRow(
+                icon: "phone.arrow.up.right",
+                title: "Auto Answer",
+                isOn: Binding(
+                    get: { viewModel.state.autoCallEnabled },
+                    set: { viewModel.setAutoCall(enabled: $0) }
+                )
+            )
 
-                HStack(spacing: 8) {
-                    PillToggle(
-                        title: "Auto Answer",
-                        systemImage: "phone.arrow.up.right",
-                        isOn: Binding(
-                            get: { viewModel.state.autoCallEnabled },
-                            set: { viewModel.setAutoCall(enabled: $0) }
-                        ),
-                        accentColor: .green
-                    )
+            Divider()
+                .opacity(0.3)
+                .padding(.leading, 38)
 
-                    PillToggle(
-                        title: "Comfort Call",
-                        systemImage: "phone.circle",
-                        isOn: Binding(
-                            get: { viewModel.state.comfortCallEnabled },
-                            set: { viewModel.setComfortCall(enabled: $0) }
-                        ),
-                        accentColor: .green
-                    )
-
-                    Spacer()
-                }
-            }
+            settingRow(
+                icon: "phone.circle",
+                title: "Comfort Call",
+                isOn: Binding(
+                    get: { viewModel.state.comfortCallEnabled },
+                    set: { viewModel.setComfortCall(enabled: $0) }
+                )
+            )
         }
-        .padding(12)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
+        .padding(.bottom, 6)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 14))
+    }
+
+    private func sectionHeader(_ title: String) -> some View {
+        Text(title)
+            .font(.system(.caption, weight: .semibold))
+            .tracking(0.6)
+            .textCase(.uppercase)
+            .foregroundStyle(.tertiary)
+            .padding(.horizontal, 14)
+            .padding(.top, 12)
+            .padding(.bottom, 4)
+    }
+
+    private func settingRow(icon: String, title: String, isOn: Binding<Bool>) -> some View {
+        HStack(spacing: 12) {
+            Image(systemName: icon)
+                .font(.callout)
+                .foregroundStyle(.secondary)
+                .frame(width: 16)
+
+            Text(title)
+                .font(.callout)
+
+            Spacer()
+
+            Toggle("", isOn: isOn)
+                .labelsHidden()
+                .toggleStyle(.switch)
+                .controlSize(.mini)
+                .scaleEffect(0.9)
+        }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 6)
     }
 }

@@ -55,12 +55,13 @@ final class RFCOMMChannel: NSObject, BluetoothTransport {
 
     func disconnect() {
         logger.info("Disconnecting RFCOMM")
+        let wasConnected = isConnected
+        isConnected = false
         channel?.close()
         channel = nil
         device?.closeConnection()
         device = nil
-        if isConnected {
-            isConnected = false
+        if wasConnected {
             onDisconnected?()
         }
     }
@@ -117,6 +118,7 @@ extension RFCOMMChannel: IOBluetoothRFCOMMChannelDelegate {
 
     func rfcommChannelClosed(_ rfcommChannel: IOBluetoothRFCOMMChannel!) {
         logger.info("RFCOMM channel closed")
+        guard isConnected else { return }
         isConnected = false
         channel = nil
         onDisconnected?()
