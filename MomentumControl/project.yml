@@ -21,7 +21,7 @@ targets:
         type: group
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.momentumcontrol.app
+        PRODUCT_BUNDLE_IDENTIFIER: com.momentumcontrol.menubar
         INFOPLIST_FILE: Info.plist
         CODE_SIGN_ENTITLEMENTS: MomentumControl.entitlements
         CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION: "YES"

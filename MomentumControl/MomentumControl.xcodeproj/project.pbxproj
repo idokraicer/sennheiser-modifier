@@ -18,7 +18,6 @@
 		38B8C4266EB41815550FAE3D /* HeadphoneViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8E69E2024F08AB97114956D /* HeadphoneViewModel.swift */; };
 		3A995E5A5AAB55B058474CEA /* GAIAPacket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7319DB61992DBDF17E027A3A /* GAIAPacket.swift */; };
 		3B77BF0A12C771614677A9BB /* GAIAPropertyRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E4490CCC991CBE842A6322F /* GAIAPropertyRegistry.swift */; };
-		3F27C58317D4A7FE070FE83A /* QuickTogglesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC9AE08B3AE9BB61BE6B7A3 /* QuickTogglesView.swift */; };
 		487D3425663BC949F8758AF3 /* IOBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9852C13107A28D523C365F25 /* IOBluetooth.framework */; };
 		5557691C8B407464E0243B3E /* GAIAPropertyRegistryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 496DBEEEC2D0CD227F2BAEC1 /* GAIAPropertyRegistryTests.swift */; };
 		5BE7D02768C67B8947B3CD18 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5D1F8D3E2EB9BBE4627AB2B /* CoreBluetooth.framework */; };
@@ -39,7 +38,6 @@
 		CC0C3B6860522BD814469C98 /* RFCOMMChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C714979E04D5D85CE2BCD2F8 /* RFCOMMChannel.swift */; };
 		CD145C4E51E78104B74ADD18 /* BLEScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36EF27706FAEE2AB22A21A29 /* BLEScanner.swift */; };
 		DE83EC685C793AB2F1AAFDFC /* m4.json in Resources */ = {isa = PBXBuildFile; fileRef = B807ECA34D278A92ED0FB1C1 /* m4.json */; };
-		E510CEA52298A4C4E43C5BC8 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F8CFC539E0F77E3C6FF6D07 /* SettingsView.swift */; };
 		E69C429910FED079E25C11C4 /* MenuBarIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142C16BD5B46B851E85C0A98 /* MenuBarIcon.swift */; };
 		E83E1DAE865FB07AE075BC84 /* GAIAValueParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA24C67363E7D8E1205D1C36 /* GAIAValueParser.swift */; };
 		EA36685937D9480CADD29D5E /* MACResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49ACE9C63BFA3C9B091795AD /* MACResolver.swift */; };
@@ -79,8 +77,6 @@
 		858948E832CDC8C704F5F318 /* MomentumControlTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MomentumControlTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		87C8768E23517744381DD222 /* UnifiedANCSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnifiedANCSlider.swift; sourceTree = "<group>"; };
 		9852C13107A28D523C365F25 /* IOBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = IOBluetooth.framework; sourceTree = "<group>"; };
-		9F8CFC539E0F77E3C6FF6D07 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		9FC9AE08B3AE9BB61BE6B7A3 /* QuickTogglesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickTogglesView.swift; sourceTree = "<group>"; };
 		A1E9474B13EA9D8AEE1F0499 /* ANCTransparencyCommandPolicyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ANCTransparencyCommandPolicyTests.swift; sourceTree = "<group>"; };
 		A5ABFC7611BFE867B449E2AF /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		AC2B239433DD5ED9BBAC7DC8 /* GAIAPropertyDefinition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GAIAPropertyDefinition.swift; sourceTree = "<group>"; };
@@ -158,8 +154,6 @@
 				142C16BD5B46B851E85C0A98 /* MenuBarIcon.swift */,
 				F898EC4DABC37163E93967A4 /* PillToggle.swift */,
 				EF344A70ABC51480475DEEE4 /* PopoverContentView.swift */,
-				9FC9AE08B3AE9BB61BE6B7A3 /* QuickTogglesView.swift */,
-				9F8CFC539E0F77E3C6FF6D07 /* SettingsView.swift */,
 				87C8768E23517744381DD222 /* UnifiedANCSlider.swift */,
 				D689FDB434B681245C99FC69 /* WaveformTrackShape.swift */,
 			);
@@ -298,10 +292,9 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1600;
-				TargetAttributes = {
-				};
 			};
 			buildConfigurationList = 9DDA8DC0AB2B39D4FB8F3AC5 /* Build configuration list for PBXProject "MomentumControl" */;
+			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -311,7 +304,6 @@
 			mainGroup = 1E7AE152C6AA8EDB768AA4F0;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 28F754F3C3CE633583A867BE /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -375,9 +367,7 @@
 				83F0C3C881746441790C9E17 /* PairedDevice.swift in Sources */,
 				9F2A06A985DBB41906EF13BA /* PillToggle.swift in Sources */,
 				EBC8247B97325915BF8BADDE /* PopoverContentView.swift in Sources */,
-				3F27C58317D4A7FE070FE83A /* QuickTogglesView.swift in Sources */,
 				CC0C3B6860522BD814469C98 /* RFCOMMChannel.swift in Sources */,
-				E510CEA52298A4C4E43C5BC8 /* SettingsView.swift in Sources */,
 				B7C541F177A23A7EFB56E09E /* UnifiedANCSlider.swift in Sources */,
 				1574EE040ED44EF96C76F42A /* WaveformTrackShape.swift in Sources */,
 			);
@@ -410,7 +400,7 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.momentumcontrol.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.momentumcontrol.menubar;
 				PRODUCT_NAME = MomentumControl;
 				SDKROOT = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -514,7 +504,7 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.momentumcontrol.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.momentumcontrol.menubar;
 				PRODUCT_NAME = MomentumControl;
 				SDKROOT = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;

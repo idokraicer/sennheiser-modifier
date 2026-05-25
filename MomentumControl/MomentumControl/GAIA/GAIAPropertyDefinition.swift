@@ -203,39 +203,6 @@ extension GAIAPropertyDefinition {
         notificationVendorID: 0x0495, notificationCommandID: 0x1089
     )
 
-    // MARK: Settings
-
-    static let onHeadDetection = GAIAPropertyDefinition(
-        name: "Setting_OnHeadDetection",
-        getVendorID: 0x0495, getCommandID: 0x0402,
-        getResponseVendorID: 0x0495, getResponseCommandID: 0x0502,
-        valueTypes: [.uint8],
-        setVendorID: 0x0495, setCommandID: 0x0401,
-        setResponseVendorID: 0x0495, setResponseCommandID: 0x0501,
-        setTypes: [.uint8],
-        notificationVendorID: 0x0495, notificationCommandID: 0x0482
-    )
-
-    static let autoCall = GAIAPropertyDefinition(
-        name: "Setting_AutoCall",
-        getVendorID: 0x0495, getCommandID: 0x080B,
-        getResponseVendorID: 0x0495, getResponseCommandID: 0x090B,
-        valueTypes: [.uint8],
-        setVendorID: 0x0495, setCommandID: 0x080A,
-        setResponseVendorID: 0x0495, setResponseCommandID: 0x090A,
-        setTypes: [.uint8]
-    )
-
-    static let comfortCall = GAIAPropertyDefinition(
-        name: "Setting_ComfortCall",
-        getVendorID: 0x0495, getCommandID: 0x0815,
-        getResponseVendorID: 0x0495, getResponseCommandID: 0x0915,
-        valueTypes: [.uint8],
-        setVendorID: 0x0495, setCommandID: 0x0814,
-        setResponseVendorID: 0x0495, setResponseCommandID: 0x0914,
-        setTypes: [.uint8]
-    )
-
     // MARK: Device Info
 
     static let serialNumber = GAIAPropertyDefinition(
@@ -306,7 +273,6 @@ extension GAIAPropertyDefinition {
         .anc, .ancStatus, .ancTransparency,
         .transparentHearing, .transparentHearingStatus,
         .bassBoost,
-        .onHeadDetection, .autoCall, .comfortCall,
         .serialNumber, .firmwareVersion, .modelID,
         .pairedDevicesListSize, .pairedDeviceInfo,
         .pairedDeviceConnect, .pairedDeviceDisconnect,

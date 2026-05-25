@@ -84,18 +84,30 @@ struct ANCControlView: View {
                 }
             )
 
-            // Anti-wind: visible in ANC and Transparency modes, hidden in Adaptive/Off
-            if showAntiWind {
+            HStack(spacing: 8) {
+                // Anti-wind: visible in ANC and Transparency modes, hidden in Adaptive/Off
+                if showAntiWind {
+                    PillToggle(
+                        title: "Anti-Wind",
+                        systemImage: "wind",
+                        isOn: Binding(
+                            get: { viewModel.state.antiWindEnabled },
+                            set: { viewModel.setAntiWind(enabled: $0) }
+                        ),
+                        accentColor: accentColor
+                    )
+                    .transition(.opacity.combined(with: .move(edge: .top)))
+                }
                 PillToggle(
-                    title: "Anti-Wind",
-                    systemImage: "wind",
+                    title: "Bass Boost",
+                    systemImage: "speaker.wave.3",
                     isOn: Binding(
-                        get: { viewModel.state.antiWindEnabled },
-                        set: { viewModel.setAntiWind(enabled: $0) }
+                        get: { viewModel.state.bassBoostEnabled },
+                        set: { viewModel.setBassBoost(enabled: $0) }
                     ),
-                    accentColor: accentColor
+                    accentColor: .orange
                 )
-                .transition(.opacity.combined(with: .move(edge: .top)))
+                Spacer(minLength: 0)
             }
         }
         .padding(12)

@@ -207,21 +207,6 @@ final class HeadphoneViewModel {
                 state.bassBoostEnabled = v == 0x01
             }
 
-        case "Setting_AutoCall":
-            if let v = values.first?.asUInt8 {
-                state.autoCallEnabled = v == 0x01
-            }
-
-        case "Setting_ComfortCall":
-            if let v = values.first?.asUInt8 {
-                state.comfortCallEnabled = v == 0x01
-            }
-
-        case "Setting_OnHeadDetection":
-            if let v = values.first?.asUInt8 {
-                state.onHeadDetectionEnabled = v == 0x02
-            }
-
         case "Core_SerialNumber":
             state.serialNumber = values.first?.asString
 
@@ -465,9 +450,6 @@ final class HeadphoneViewModel {
         connection.sendGet(for: .ancTransparency)
         connection.sendGet(for: .transparentHearingStatus)
         connection.sendGet(for: .bassBoost)
-        connection.sendGet(for: .onHeadDetection)
-        connection.sendGet(for: .autoCall)
-        connection.sendGet(for: .comfortCall)
         connection.sendGet(for: .serialNumber)
         connection.sendGet(for: .firmwareVersion)
         connection.sendGet(for: .modelID)
@@ -682,32 +664,6 @@ final class HeadphoneViewModel {
 
     func setBassBoost(enabled: Bool) {
         connection.sendSet(for: .bassBoost, values: [.uint8(enabled ? 0x01 : 0x00)])
-    }
-
-    func setAutoCall(enabled: Bool) {
-        connection.sendSet(for: .autoCall, values: [.uint8(enabled ? 0x01 : 0x00)])
-        // Re-fetch after SET since device sends empty ACK
-        Task { @MainActor in
-            try? await Task.sleep(for: .seconds(0.5))
-            connection.sendGet(for: .autoCall)
-        }
-    }
-
-    func setComfortCall(enabled: Bool) {
-        connection.sendSet(for: .comfortCall, values: [.uint8(enabled ? 0x01 : 0x00)])
-        // Re-fetch after SET since device sends empty ACK
-        Task { @MainActor in
-            try? await Task.sleep(for: .seconds(0.5))
-            connection.sendGet(for: .comfortCall)
-        }
-    }
-
-    func setOnHeadDetection(enabled: Bool) {
-        connection.sendSet(for: .onHeadDetection, values: [.uint8(enabled ? 0x01 : 0x00)])
-        Task { @MainActor in
-            try? await Task.sleep(for: .seconds(0.5))
-            connection.sendGet(for: .onHeadDetection)
-        }
     }
 
     // MARK: - Paired Devices

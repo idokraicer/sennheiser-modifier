@@ -36,36 +36,20 @@ struct PopoverContentView: View {
         }
     }
 
-    /// The connected-state content. Wrapped in a fixed-height ScrollView only
-    /// when "More" is expanded, since that's the only state where content can
-    /// overflow. Otherwise we use intrinsic sizing — `ScrollView` inside
-    /// `MenuBarExtra(.window)` collapses to 0 height without an explicit frame.
-    @ViewBuilder
     private var connectedContent: some View {
-        if isMoreExpanded {
-            ScrollView(.vertical, showsIndicators: false) {
-                mainStack
-            }
-            .frame(height: 540)
-        } else {
-            mainStack
-        }
+        mainStack
     }
 
     private var mainStack: some View {
         VStack(spacing: 12) {
             DeviceHeaderView(state: viewModel.state)
             ANCControlView(viewModel: viewModel)
-            QuickTogglesView(viewModel: viewModel)
 
             ExpandableSection(
                 title: "More",
                 isExpanded: $isMoreExpanded
             ) {
-                VStack(spacing: 10) {
-                    ConnectedDevicesView(viewModel: viewModel)
-                    SettingsView(viewModel: viewModel)
-                }
+                ConnectedDevicesView(viewModel: viewModel)
             }
         }
         .padding(12)

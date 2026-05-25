@@ -34,11 +34,6 @@ final class DeviceState {
     // MARK: - Audio
     var bassBoostEnabled: Bool = false
 
-    // MARK: - Settings
-    var onHeadDetectionEnabled: Bool = false
-    var autoCallEnabled: Bool = false
-    var comfortCallEnabled: Bool = false
-
     // MARK: - Paired Devices
     var pairedDeviceCount: Int = 0
     var pairedDevices: [PairedDevice] = []
@@ -128,9 +123,6 @@ final class DeviceState {
         adaptiveModeEnabled = false
         transparentHearingEnabled = false
         bassBoostEnabled = false
-        onHeadDetectionEnabled = false
-        autoCallEnabled = false
-        comfortCallEnabled = false
         pairedDeviceCount = 0
         pairedDevices = []
         connectingDevices = []
